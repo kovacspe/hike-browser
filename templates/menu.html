@@ -1,0 +1,15 @@
+<h1>Hike browser</h1>
+
+<h2>Jednodňové túry</h2>
+<ul>
+    {% for hike in hikes %}
+    <li><a href='{{hike.slug}}'>{{hike.slug}}</a></li>
+    {% endfor %}
+</ul>
+
+<h2>Viacdňové túry</h2>
+<ul>
+    {% for group in groups %}
+    <li>{{group.name}}</li>
+    {% endfor %}
+</ul>
