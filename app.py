@@ -1,6 +1,10 @@
-from flask import Flask, render_template
+import os
+
+from flask import Flask, render_template, redirect, send_from_directory
 from models import Group, Hike
 from manage import load_all
+
+from settings import DATA_DIR
 app = Flask(__name__)
 
 
@@ -17,19 +21,27 @@ def menu():
     )
 
 
-@app.route("/group/slug")
+@app.route("/group/<slug>")
 def group(slug: str):
+    group = Group.load_by_slug(slug)
     return render_template(
-        'menu.html',
-        groups=groups,
-        hikes=hikes
+        'group.html',
+        group=group
     )
 
 
-@app.route("/hike/slug")
+@app.route("/hike/<slug>")
 def hike(slug: str):
-    hike = Hike.load_from_folder(slug)
-    return render_template(
-        'hike.html',
-        hike=hike,
-    )
+    hike = Hike.load_by_slug(slug)
+    if hike is not None:
+        return render_template(
+            'hike.html',
+            hike=hike
+        )
+    else:
+        return redirect('/')
+
+
+@app.route('/photo/<slug>/<filename>')
+def download_file(slug, filename):
+    return send_from_directory(os.path.join(DATA_DIR, slug, 'img'), filename, as_attachment=False)
