@@ -8,7 +8,8 @@ import gpxpy
 from gpxpy.gpx import GPXRoutePoint
 
 
-from utils import yaml_equivalent_of_default, slugify
+from utils import yaml_equivalent_of_default, slugify, is_group
+from settings import DATA_DIR
 
 
 class PointOfInterest(NamedTuple):
@@ -27,21 +28,56 @@ yaml.add_representer(HikeStats, yaml_equivalent_of_default)
 yaml.add_representer(PointOfInterest, yaml_equivalent_of_default)
 
 
+# class HikeEntity:
+#     def __init__(self, name):
+#         self.name = name
+
+#     @classmethod
+#     def load_by_slug(cls, slug):
+#         path = os.path.join(DATA_DIR, slug)
+#         return cls.load_from_folder(path)
+
+
 class Group:
-    def __init__(self):
-        self.slug = None
-        self.description = ''
+    def __init__(self, name, start_date, end_date, slug=None):
+        self.slug = slug or f'{start_date.year}-{slugify(name)}'
+        self.name = name
+        self.start_date = start_date
+        self.end_date = end_date
+        self.md_description = ''
         self.hikes = []
 
     @classmethod
+    def load_by_slug(cls, slug: str):
+        path = os.path.join(DATA_DIR, slug)
+        print(f'Loading group from {path}')
+        return cls.load_from_folder(path)
+
+    @classmethod
     def load_from_folder(cls, path):
-        pass
+        if not is_group(path):
+            raise ValueError(f'{path} is not a group')
+        with open(os.path.join(path, 'group_info.yaml'), 'r', encoding='utf-8') as info_file:
+            info = yaml.load(info_file)
+        start_date = datetime.datetime.strptime(info['start_date'], '%d.%M.%Y')
+        end_date = datetime.datetime.strptime(info['end_date'], '%d.%M.%Y')
+        group = cls(info['name'], start_date, end_date,
+                    slug=info.get('slug', None))
+        group.hikes = cls.retrieve_hikes()
+        return group
+
+    def serialize(self, path):
+        with open(os.path.join(path, 'group_info.yaml'), 'w', encoding='utf-8') as info_file:
+            info = self.__dict__
+            yaml.dump(info, info_file)
+        with open(os.path.join(path, 'description.md'), 'w', encoding='utf-8') as desc_file:
+            desc_file.write(self.md_description)
 
 
 class Hike:
-    def __init__(self, name, date):
+    def __init__(self, name, date, slug):
         self.name = name
-        self.slug = f'{date.year}-{slugify(name)}'
+        self.slug = slug or f'{date.year}-{slugify(name)}'
         self.image_paths = []
         self.date = date
         self.start_name = None
@@ -54,8 +90,13 @@ class Hike:
         self.md_description = ''
 
     @classmethod
+    def load_by_slug(cls, slug):
+        path = os.path.join(DATA_DIR, slug)
+        print(f'Loading hike from {path}')
+        return cls.load_from_folder(path)
+
+    @classmethod
     def load_from_folder(cls, path):
-        #path = os.path.join(DATA_DIR, hike_folder)
         if os.path.exists(os.path.join(path, 'route.gpx')):
             with open(os.path.join(path, 'route.gpx'), 'r', encoding='utf-8') as gpx_file:
                 gpx = gpxpy.parse(gpx_file)
@@ -68,7 +109,8 @@ class Hike:
             info = yaml.load(info_file)
         with open(os.path.join(path, 'description.md'), 'r', encoding='utf-8') as desc_file:
             desc = '\n'.join(desc_file.readlines())
-        new_hike = cls(info['tag'], info['date'])
+        new_hike = cls(info.get('name', 'NAZOVS'),
+                       info['date'], slug=info.get('slug', None))
         new_hike.image_paths = os.listdir(os.path.join(path, 'img'))
         new_hike.hike_stats = hike_stats
         new_hike.md_description = desc
