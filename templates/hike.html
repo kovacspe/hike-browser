@@ -1,5 +1,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+    <script src="https://api.mapy.cz/loader.js"></script>
+    <script>Loader.load()</script>
 </head>
 
 <body>
@@ -28,12 +30,13 @@
         {{hike.description}}
     </div>
 
+    <div id="mapa" style="width:600px; height:400px;"></div>
 
     <!-- Slideshow container -->
     <div class="slideshow-container">
 
         {%for photo_path in hike.image_paths %}
-        <div class="mySlides fade">
+        <div class="mySlides">
             <img src="/photo/{{hike.slug}}/{{photo_path}}" loading="eager" style="width:100%">
         </div>
         {% endfor %}
@@ -56,6 +59,19 @@
 
 
     <script>
+        document.onkeydown = checkKey;
+
+        function checkKey(e) {
+
+            e = e || window.event;
+            console.log(e.keyCode)
+            if (e.keyCode == 37) {
+                plusSlides(-1)
+            } else if (e.keyCode == 39) {
+                plusSlides(1)
+            }
+        }
+
         var slideIndex = 1;
         showSlides(slideIndex);
 
@@ -84,6 +100,11 @@
             slides[slideIndex - 1].style.display = "block";
             dots[slideIndex - 1].className += " active";
         }
+
+        var stred = SMap.Coords.fromWGS84(14.41, 50.08);
+        var mapa = new SMap(JAK.gel("mapa"), stred, 10);
+        mapa.addDefaultLayer(SMap.DEF_BASE).enable();
+        mapa.addDefaultControls();
     </script>
 
 </body>
