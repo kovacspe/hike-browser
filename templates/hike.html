@@ -34,9 +34,7 @@
 
         {%for photo_path in hike.image_paths %}
         <div class="mySlides fade">
-            <div class="numbertext">1 / 3</div>
             <img src="/photo/{{hike.slug}}/{{photo_path}}" loading="eager" style="width:100%">
-            <div class="text">Caption Text</div>
         </div>
         {% endfor %}
 
@@ -50,9 +48,10 @@
 
     <!-- The dots/circles -->
     <div style="text-align:center">
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-        <span class="dot" onclick="currentSlide(3)"></span>
+        {%for i in hike.image_paths %}
+        <span class="dot" onclick="currentSlide({{loop.counter}})"></span>
+        {% endfor %}
+
     </div>
 
 

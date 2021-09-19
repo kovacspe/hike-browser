@@ -8,7 +8,7 @@
 <ol>
     {% for hike in group.hikes %}
     <li>
-        {{hike.name}}
+        <a href='/group/{{group.slug}}/{{hike.slug}}'>{{hike.name}}</a>
     </li>
     {% endfor %}
 </ol>

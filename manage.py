@@ -4,6 +4,8 @@ from typing import NamedTuple
 
 import fire
 import yaml
+from PIL import Image
+from tqdm import tqdm
 import gpxpy
 from gpxpy.gpx import GPXRoutePoint
 
@@ -30,6 +32,18 @@ def register(name):
     pass
 
 
+def rotate_images(path: str):
+    if path.endswith('*'):
+        paths = [os.path.join(path[:-1], photo)
+                 for photo in os.listdir(path[:-1])]
+    else:
+        paths = [path]
+    for path in tqdm(paths):
+        img = Image.open(path)
+        img = img.transpose(Image.ROTATE_90)
+        img.save(path)
+
+
 def load_all():
     groups = []
     hikes = []
@@ -53,5 +67,6 @@ if __name__ == '__main__':
     fire.Fire({
         'init': init_hike,
         'add': register,
-        'load': load_all
+        'load': load_all,
+        'rotateimg': rotate_images
     })

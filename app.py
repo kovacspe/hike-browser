@@ -44,4 +44,5 @@ def hike(slug: str):
 
 @app.route('/photo/<slug>/<filename>')
 def download_file(slug, filename):
+
     return send_from_directory(os.path.join(DATA_DIR, slug, 'img'), filename, as_attachment=False)
