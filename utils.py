@@ -1,5 +1,6 @@
 import os
 import unidecode
+import datetime
 
 
 def is_group(folder_path: str) -> bool:
@@ -22,3 +23,12 @@ def yaml_equivalent_of_default(dumper, data):
     dict_representation = data._asdict()
     node = dumper.represent_dict(dict_representation)
     return node
+
+
+def parse_timedelta(time):
+    hours, minutes = time.split(':')
+    return datetime.timedelta(hours=int(hours), minutes=int(minutes))
+
+
+def format_timedelta(time: datetime.timedelta):
+    return ':'.join(str(time).split(':')[:2])

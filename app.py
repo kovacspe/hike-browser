@@ -5,7 +5,7 @@ from models import Group, Hike
 from manage import load_all
 
 from settings import DATA_DIR
-app = Flask(__name__)
+app = F(__name__)
 
 
 @app.route("/")

@@ -1,0 +1,50 @@
+name: Čergov
+date: 2023-04-10
+start_at: 09:00
+with_who: []
+tags: []
+segments:
+  - name: Lipany - Vyhliadková veža
+    time: 00:00
+    travel_by: foot
+  - name: Vyhliadková veža - Prameň
+    time: 00:00
+    travel_by: foot
+  - name: Prameň - Kamenica - hrad
+    time: 00:00
+    travel_by: foot
+  - name: Kamenica - hrad - Spiaci mních
+    time: 00:00
+    travel_by: foot
+  - name: Spiaci mních - Sokolia skala
+    time: 00:00
+    travel_by: foot
+places:
+  - name: Lipany
+    rest_time: 00:00
+    type: Rázcestník
+    description: null
+  - name: Vyhliadková veža
+    rest_time: 00:00
+    type: Rázcestník
+    description: null
+  - name: Prameň
+    rest_time: 00:00
+    type: Rázcestník
+    description: null
+  - name: Kamenica - hrad
+    rest_time: 00:00
+    type: Rázcestník
+    description: null
+  - name: Spiaci mních
+    rest_time: 00:00
+    type: Rázcestník
+    description: null
+  - name: Sokolia skala
+    rest_time: 00:00
+    type: Rázcestník
+    description: null
+  - name: Útulňa pod Minčolom
+    rest_time: 00:00
+    type: Rázcestník
+    description: null

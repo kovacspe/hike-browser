@@ -1,35 +1,72 @@
-import datetime
 import os
-from typing import NamedTuple
 
+import shutil
 import fire
-import yaml
 from PIL import Image
 from tqdm import tqdm
-import gpxpy
-from gpxpy.gpx import GPXRoutePoint
 
-from models import Hike, Group
-from utils import is_group
-from settings import DATA_DIR
+from models import Hike, HikeFactory
+from settings import DATA_DIR, OUTPUT_DIR, BASE_DIR
+
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
-def init_hike(date, name):
+import datetime
+env = Environment(
+    loader=FileSystemLoader("templates"),
+    autoescape=select_autoescape()
+)
+
+
+def init_hike(name: str):
     """Initialize data folder"""
-    date = datetime.datetime.strptime(date, '%d.%M.%Y')
-    new_hike = Hike(name, date)
-    hike_folder = new_hike.slug
-    os.mkdir(os.path.join(DATA_DIR, hike_folder))
-    os.mkdir(os.path.join(DATA_DIR, hike_folder, 'img'))
-
-    new_hike.serialize(os.path.join(DATA_DIR, hike_folder))
-    print(f'Sucessfully created hike with name: {hike_folder}')
+    os.mkdir(os.path.join(DATA_DIR, name))
+    print(f'Sucessfully created hike with name: {name}')
 
 
-def register(name):
+def generate(name: str):
     """Register hike"""
+    hike = HikeFactory.create(name)
+    hike.save()
 
-    pass
+
+def build_pages():
+    shutil.rmtree(OUTPUT_DIR)
+    os.mkdir(OUTPUT_DIR)
+    os.mkdir(os.path.join(OUTPUT_DIR, 'hike'))
+    for name in os.listdir(DATA_DIR):
+        try:
+            build_hike_page(name)
+        except:
+            pass
+    build_index()
+    shutil.copytree(os.path.join(BASE_DIR, 'static'),
+                    os.path.join(OUTPUT_DIR, 'static'))
+
+
+def build_index():
+    data = {'hikes': []}
+    for name in os.listdir(DATA_DIR):
+        try:
+            hike = Hike.from_folder(name)
+            data['hikes'].append(
+                {
+                    'slug': hike.slug,
+                    'name': hike.plan.name
+                }
+            )
+        except:
+            pass
+    template = env.get_template('index.html')
+    with open(os.path.join(OUTPUT_DIR, 'index.html'), 'w', encoding='utf-8') as html_file:
+        html_file.write(template.render(**data))
+
+
+def build_hike_page(name: str):
+    template = env.get_template('hike.html')
+    hike = Hike.from_folder(name)
+    with open(os.path.join(OUTPUT_DIR, 'hike', f'{name}.html'), 'w', encoding='utf-8') as html_file:
+        html_file.write(template.render(**hike.as_dict()))
 
 
 def rotate_images(path: str):
@@ -44,29 +81,12 @@ def rotate_images(path: str):
         img.save(path)
 
 
-def load_all():
-    groups = []
-    hikes = []
-    for folder in os.listdir(DATA_DIR):
-        folder_path = os.path.join(DATA_DIR, folder)
-        print(folder_path)
-        if not os.path.isdir(folder_path):
-            continue
-        if is_group(folder_path):
-            groups.append(Group.load_from_folder(folder_path))
-            hikes += groups[-1].hikes
-        else:
-            hikes.append(Hike.load_from_folder(folder_path))
-    return hikes, groups
-    # for hike in hikes:
-    #     print(hike)
-    #     hike.serialize(os.path.join(DATA_DIR, hike.slug))
-
-
 if __name__ == '__main__':
     fire.Fire({
         'init': init_hike,
-        'add': register,
-        'load': load_all,
-        'rotateimg': rotate_images
+        'generate': generate,
+        'rotateimg': rotate_images,
+        'build': build_hike_page,
+        'build-all': build_pages,
+        'build-index': build_index
     })

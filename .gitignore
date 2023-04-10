@@ -129,4 +129,7 @@ dmypy.json
 .pyre/
 
 .vscode
-source/*
+source/*/img/*
+source/*/*/img/*
+output/*
+

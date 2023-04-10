@@ -1,148 +1,259 @@
 import datetime
 import os
-from typing import NamedTuple
+from typing import NamedTuple, List, Optional
+from pydantic_yaml import YamlModel, YamlStrEnum, YamlStr
+from pydantic import validator
 
-import fire
-import yaml
+
 import gpxpy
-from gpxpy.gpx import GPXRoutePoint
+from gpxpy.gpx import GPX, GPXTrack, GPXTrackSegment
 
-
-from utils import yaml_equivalent_of_default, slugify, is_group
+from utils import format_timedelta
 from settings import DATA_DIR
 
 
-class PointOfInterest(NamedTuple):
-    gps: GPXRoutePoint
+class Time(YamlStr):
+    @property
+    def time(self):
+        hours, minutes = self.split(':')
+        return datetime.timedelta(hours=int(hours), minutes=int(minutes))
+
+
+class PlaceType(YamlStrEnum):
+    SIGN_POST = 'Rázcestník'
+    POINT_OF_INTEREST = 'Zaujímavosť'
+    MEMORY = 'Spomienka'
+    SLEEPING_PLACE = 'Prespávanie'
+
+
+class TravelBy(YamlStrEnum):
+    FOOT = 'foot'
+    CAR = 'car'
+    BIKE = 'bike'
+    PUBLIC_TRANSPORT = 'pt'
+
+
+class Place(YamlModel):
     name: str
-    description: str
+    rest_time: Time
+    type: PlaceType
+    description: str = None
+
+    @validator('rest_time')
+    def _check_start_at(cls, v: str) -> Time:  # noqa
+        """You can add your normal pydantic validators, like this one."""
+        return Time(v)
+
+
+class Segment(YamlModel):
+    name: str
+    time: Time
+    travel_by: TravelBy
+
+    @validator('time')
+    def _check_time(cls, v: str) -> Time:  # noqa
+        """You can add your normal pydantic validators, like this one."""
+        return Time(v)
+
+
+class HikePlan(YamlModel):
+    name: str
+    date: datetime.date
+    start_at: Time
+    with_who: List[str]
+    tags: List[str]
+    segments: List[Segment]
+    places: List[Place]
+
+    @validator('start_at')
+    def _check_start_at(cls, v: str) -> Time:  # noqa
+        """You can add your normal pydantic validators, like this one."""
+        return Time(v)
 
 
 class HikeStats(NamedTuple):
     uphill: float
     downhill: float
     length: float
+    time: Optional[datetime.timedelta] = None
 
 
-yaml.add_representer(HikeStats, yaml_equivalent_of_default)
-yaml.add_representer(PointOfInterest, yaml_equivalent_of_default)
-
-
-# class HikeEntity:
-#     def __init__(self, name):
-#         self.name = name
-
-#     @classmethod
-#     def load_by_slug(cls, slug):
-#         path = os.path.join(DATA_DIR, slug)
-#         return cls.load_from_folder(path)
-
-
-class Group:
-    def __init__(self, name, start_date, end_date, slug=None):
-        self.slug = slug or f'{start_date.year}-{slugify(name)}'
-        self.name = name
-        self.start_date = start_date
-        self.end_date = end_date
-        self.md_description = ''
-        self.hikes = []
-
-    @classmethod
-    def load_by_slug(cls, slug: str):
-        path = os.path.join(DATA_DIR, slug)
-        print(f'Loading group from {path}')
-        return cls.load_from_folder(path)
-
-    @classmethod
-    def load_from_folder(cls, path):
-        if not is_group(path):
-            raise ValueError(f'{path} is not a group')
-        with open(os.path.join(path, 'group_info.yaml'), 'r', encoding='utf-8') as info_file:
-            info = yaml.load(info_file)
-        start_date = datetime.datetime.strptime(info['start_date'], '%d.%M.%Y')
-        end_date = datetime.datetime.strptime(info['end_date'], '%d.%M.%Y')
-        group = cls(info['name'], start_date, end_date,
-                    slug=info.get('slug', None))
-        group.hikes = cls.retrieve_hikes()
-        return group
-
-    def serialize(self, path):
-        with open(os.path.join(path, 'group_info.yaml'), 'w', encoding='utf-8') as info_file:
-            info = self.__dict__
-            yaml.dump(info, info_file)
-        with open(os.path.join(path, 'description.md'), 'w', encoding='utf-8') as desc_file:
-            desc_file.write(self.md_description)
+class IterinaryPoint(NamedTuple):
+    from_time: datetime.time
+    to: datetime.time
+    time: datetime.timedelta
+    name: str
+    description: Optional[str] = None
+    travel_by: Optional[TravelBy] = None
+    stats: Optional[HikeStats] = None
 
 
 class Hike:
-    def __init__(self, name, date, slug):
-        self.name = name
-        self.slug = slug or f'{date.year}-{slugify(name)}'
-        self.image_paths = []
-        self.date = date
-        self.start_name = None
-        self.end_name = None
-        self.with_who = []
-        self.hike_stats = None  # type: HikeStats
-        self.places = []
-        self.expected_time = 0
-        self.real_time = 0
-        self.md_description = ''
-
-    @classmethod
-    def load_by_slug(cls, slug):
-        path = os.path.join(DATA_DIR, slug)
-        print(f'Loading hike from {path}')
-        return cls.load_from_folder(path)
-
-    @classmethod
-    def load_from_folder(cls, path):
-        if os.path.exists(os.path.join(path, 'route.gpx')):
-            with open(os.path.join(path, 'route.gpx'), 'r', encoding='utf-8') as gpx_file:
-                gpx = gpxpy.parse(gpx_file)
-                hike_stats = cls._get_stats(gpx)
-        else:
-            gpx = None
-            hike_stats = {}
-
-        with open(os.path.join(path, 'info.yaml'), 'r', encoding='utf-8') as info_file:
-            info = yaml.load(info_file)
-        with open(os.path.join(path, 'description.md'), 'r', encoding='utf-8') as desc_file:
-            desc = '\n'.join(desc_file.readlines())
-        new_hike = cls(info.get('name', 'NAZOVS'),
-                       info['date'], slug=info.get('slug', None))
-        new_hike.image_paths = os.listdir(os.path.join(path, 'img'))
-        new_hike.hike_stats = hike_stats
-        new_hike.md_description = desc
-        if info['hike_stats'] is not None:
-            new_hike.hike_stats = HikeStats(**info['hike_stats'])
-        else:
-            new_hike.hike_stats = None
-        return new_hike
+    def __init__(self, slug: str, plan: HikePlan, gpx_track: GPX):
+        self.plan = plan
+        self.slug = slug
+        self.gpx_track = gpx_track
 
     @staticmethod
-    def _get_stats(gpx):
-        route = gpx.tracks[0].segments[0]
-        length = route.length_3d()/1000
-        uphill, downhill = route.get_uphill_downhill()
+    def get_folder(name: str) -> str:
+        """Get hike folder path by name"""
+        return os.path.join(DATA_DIR, name)
+
+    @property
+    def folder(self) -> str:
+        """Get hike folder path"""
+        return self.get_folder(self.slug)
+
+    @property
+    def track(self) -> GPXTrack:
+        """Get track"""
+        return self.gpx_track.tracks[0]
+
+    @classmethod
+    def from_folder(cls, name: str):
+        """Load hike from folder"""
+        hike_path = cls.get_folder(name)
+        plan = HikePlan.parse_file(os.path.join(hike_path, 'plan.yaml'))
+        with open(os.path.join(hike_path, 'hike.gpx'), 'r', encoding='utf-8') as gpx_file:
+            gpx_track = gpxpy.parse(gpx_file)
+        return Hike(name, plan, gpx_track)
+
+    def save(self):
+        """Save hike to folder"""
+        with open(os.path.join(self.folder, 'plan.yaml'), 'w', encoding='utf-8') as plan_file:
+            plan_file.write(self.plan.yaml())
+        with open(os.path.join(self.folder, 'hike.gpx'), 'w', encoding='utf-8') as gpx_file:
+            gpx_file.write(self.gpx_track.to_xml())
+
+    def get_stats(self) -> HikeStats:
+        """Compute status"""
+        length = self.track.length_3d()/1000
+        uphill, downhill = self.track.get_uphill_downhill()
         return HikeStats(
             length=length,
             uphill=uphill,
             downhill=downhill
         )
 
-    def to_html(self):
-        pass
+    def get_segment_stats(self, segment_number: int) -> HikeStats:
+        """Compute status"""
+        length = self.track.segments[segment_number].length_3d()/1000
+        uphill, downhill = self.track.segments[segment_number].get_uphill_downhill(
+        )
+        return HikeStats(
+            length=length,
+            uphill=uphill,
+            downhill=downhill
+        )
 
-    def validate(self):
-        pass
+    def get_iterinary(self, start_time: Time) -> List[IterinaryPoint]:
+        """Get iterinary"""
+        schedule = []
+        current_time = start_time.time
+        for i, (place, segment) in enumerate(zip(self.plan.places[:-1], self.plan.segments)):
+            delta = place.rest_time.time
+            segment_stats = self.get_segment_stats(i)
+            schedule.append(
+                IterinaryPoint(
+                    from_time=format_timedelta(
+                        current_time) if current_time else None,
+                    to=format_timedelta(current_time+delta),
+                    name=place.name,
+                    description=place.description,
+                    time=delta
 
-    def serialize(self, path):
-        with open(os.path.join(path, 'info.yaml'), 'w', encoding='utf-8') as info_file:
-            info = self.__dict__
-            yaml.dump(info, info_file)
-        with open(os.path.join(path, 'description.md'), 'w', encoding='utf-8') as desc_file:
-            desc_file.write(self.md_description)
+                ))
+            current_time += delta
+            delta = segment.time.time
+            schedule.append(IterinaryPoint(
+                from_time=format_timedelta(current_time),
+                to=format_timedelta(current_time+delta),
+                name=segment.name,
+                travel_by=segment.travel_by,
+                time=delta,
+                stats=segment_stats
 
-    def __str__(self):
-        return str(self.__dict__)
+            ))
+
+            current_time += delta
+        last_place = self.plan.places[-1]
+        schedule.append(IterinaryPoint(
+            from_time=format_timedelta(current_time),
+            to=None,
+            name=last_place.name,
+            description=last_place.description,
+            time=delta
+        ))
+        return schedule
+
+    def as_dict(self):
+        """Serialize to dictionary"""
+        serialized = {}
+        serialized['schedule'] = self.get_iterinary(self.plan.start_at)
+        serialized['stats'] = self.get_stats()
+        return serialized
+
+
+class HikeFactory:
+
+    @staticmethod
+    def generate_metadata_dict(hike: GPX):
+        places = []
+        segments = []
+        for waypoint in hike.waypoints:
+            places.append(
+                Place(
+                    name=waypoint.name,
+                    rest_time='00:00',
+                    type=PlaceType.SIGN_POST
+                )
+            )
+        for i, _ in enumerate(hike.tracks[0].segments):
+            segments.append(
+                Segment(
+                    name=f'{places[i].name} - {places[i+1].name}',
+                    travel_by=TravelBy.FOOT,
+                    time='00:00'
+                )
+            )
+        return HikePlan(
+            name='Name',
+            segments=segments,
+            places=places,
+            tags=[],
+            with_who=[],
+            date=datetime.date.today(),
+            start_at='9:00'
+        )
+
+    @staticmethod
+    def segment_by_waypoints(track: GPX, waypoints: GPX):
+        """Divide track by waypoints"""
+        segments = []
+        last_point = 0
+        for waypoint in waypoints.waypoints[1:-1]:
+            point_on_track = track.get_nearest_location(waypoint)
+            segments.append(
+                GPXTrackSegment(
+                    track.tracks[0].segments[0].points[last_point:point_on_track.point_no]
+                )
+            )
+            last_point = point_on_track.point_no
+        new_file = GPX()
+        new_track = GPXTrack()
+        new_track.segments = segments
+        new_file.tracks = [new_track]
+        new_file.waypoints = waypoints.waypoints
+        return new_file
+
+    @classmethod
+    def create(cls, folder_name: str) -> Hike:
+        """Create new Hike"""
+        hike_folder = Hike.get_folder(folder_name)
+        with open(os.path.join(hike_folder, 'route.gpx'), 'r', encoding='utf-8') as gpx_file:
+            track = gpxpy.parse(gpx_file)
+        with open(os.path.join(hike_folder, 'waypoints.gpx'), 'r', encoding='utf-8') as gpx_file:
+            waypoints = gpxpy.parse(gpx_file)
+        new_gpx = cls.segment_by_waypoints(track, waypoints)
+        plan = cls.generate_metadata_dict(new_gpx)
+        return Hike(folder_name, plan, new_gpx)

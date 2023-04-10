@@ -1,0 +1,127 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+    <script src="https://api.mapy.cz/loader.js"></script>
+    <script>Loader.load()</script>
+</head>
+
+<body>
+    <h1>{{hike.name}}</h1>
+
+    <div class="clearfix border">
+        <div class="col col-6 border">
+            <div>
+                <h2>Štatistiky</h2>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Dĺžka:</td>
+                            <td>{{hike.hike_stats.length}}</td>
+                        </tr>
+                        <tr>
+                            <td>Stúpanie:</td>
+                            <td>{{hike.hike_stats.uphill}}</td>
+                        </tr>
+                        <tr>
+                            <td>Klesanie:</td>
+                            <td>{{hike.hike_stats.downhill}}</td>
+                        </tr>
+                        <tr>
+                            <td>Odhadovaný čas cesty:</td>
+                            <td>{{hike.expected_time}}</td>
+                        </tr>
+                        <tr>
+                            <td>Reálny čas:</td>
+                            <td>{{hike.real_time}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                {{hike.description}}
+            </div>
+        </div>
+        <div class="col col-6 border" id="mapa" style="width:600px; height:400px;"></div>
+    </div>
+
+
+    <!-- Slideshow container -->
+    <div class="slideshow-container">
+
+        {%for photo_path in hike.image_paths %}
+        <div class="mySlides">
+            <img src="/photo/{{hike.slug}}/{{photo_path}}" loading="eager" style="width:100%">
+        </div>
+        {% endfor %}
+
+
+
+        <!-- Next and previous buttons -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    <br>
+
+    <!-- The dots/circles -->
+    <div style="text-align:center">
+        {%for i in hike.image_paths %}
+        <span class="dot" onclick="currentSlide({{loop.counter}})"></span>
+        {% endfor %}
+
+    </div>
+
+
+    <script>
+        document.onkeydown = checkKey;
+
+        function checkKey(e) {
+
+            e = e || window.event;
+            console.log(e.keyCode)
+            if (e.keyCode == 37) {
+                plusSlides(-1)
+            } else if (e.keyCode == 39) {
+                plusSlides(1)
+            }
+        }
+
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        // Next/previous controls
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        // Thumbnail image controls
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("dot");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
+        var parser, xmlDoc;
+        parser = new DOMParser();
+
+        xmlDoc = parser.parseFromString({{ hike.gpx }}, "text/xml");
+        var stred = SMap.Coords.fromWGS84(14.41, 50.08);
+        var mapa = new SMap(JAK.gel("mapa"), stred, 10);
+        mapa.addDefaultLayer(SMap.DEF_TURIST).enable();
+        var layer = SMap.Layer.GPX(xmlDoc, id, options);
+        mapa.addDefaultControls();
+    </script>
+
+</body>
