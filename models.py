@@ -86,6 +86,7 @@ class IterinaryPoint(NamedTuple):
     description: Optional[str] = None
     travel_by: Optional[TravelBy] = None
     stats: Optional[HikeStats] = None
+    ref: Optional[str] = None
 
 
 class Hike:
@@ -97,7 +98,7 @@ class Hike:
     @staticmethod
     def get_folder(name: str) -> str:
         """Get hike folder path by name"""
-        return os.path.join(DATA_DIR, name)
+        return os.path.join(DATA_DIR, 'hikes', name)
 
     @property
     def folder(self) -> str:

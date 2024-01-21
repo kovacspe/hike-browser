@@ -20,7 +20,7 @@ env = Environment(
 
 def init_hike(name: str):
     """Initialize data folder"""
-    os.mkdir(os.path.join(DATA_DIR, name))
+    os.mkdir(os.path.join(DATA_DIR, 'hikes', name))
     print(f'Sucessfully created hike with name: {name}')
 
 
@@ -34,7 +34,7 @@ def build_pages():
     shutil.rmtree(OUTPUT_DIR)
     os.mkdir(OUTPUT_DIR)
     os.mkdir(os.path.join(OUTPUT_DIR, 'hike'))
-    for name in os.listdir(DATA_DIR):
+    for name in os.listdir(os.path.join(DATA_DIR, 'hikes')):
         try:
             build_hike_page(name)
         except:
@@ -46,7 +46,7 @@ def build_pages():
 
 def build_index():
     data = {'hikes': []}
-    for name in os.listdir(DATA_DIR):
+    for name in os.listdir(os.path.join(DATA_DIR, 'hikes')):
         try:
             hike = Hike.from_folder(name)
             data['hikes'].append(

@@ -1,1 +1,0 @@
-Bolo tam pekne

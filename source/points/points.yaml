@@ -1,0 +1,8 @@
+places:
+  spiaci-mnich:
+    name: Spiaci mních
+    type: poi
+    description: Skalný útvar
+    lat: 49.209835
+    lon: 20.932406
+    elevation: 672.856567
