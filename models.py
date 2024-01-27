@@ -1,62 +1,97 @@
 import datetime
+import json
 import os
-from typing import NamedTuple, List, Optional
-from pydantic_yaml import YamlModel, YamlStrEnum, YamlStr
-from pydantic import validator
-
+from decimal import Decimal
+from enum import Enum
+from typing import List, NamedTuple, Optional
 
 import gpxpy
+import yaml
 from gpxpy.gpx import GPX, GPXTrack, GPXTrackSegment
+from pydantic import BaseModel, GetCoreSchemaHandler, validator
+from pydantic_core import core_schema
+from pydantic_yaml import parse_yaml_file_as, to_yaml_file
 
-from utils import format_timedelta
 from settings import DATA_DIR
+from utils import format_timedelta, segment_by_waypoints, slugify
 
 
-class Time(YamlStr):
-    @property
-    def time(self):
-        hours, minutes = self.split(':')
+class Time(datetime.timedelta):
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, source, handler: GetCoreSchemaHandler
+    ) -> core_schema.CoreSchema:
+        return core_schema.no_info_after_validator_function(
+            cls.validate,
+            core_schema.str_schema(),
+            serialization=core_schema.wrap_serializer_function_ser_schema(
+                lambda x, y: ":".join(str(x).split(":")[:2]))
+        )
+
+    @classmethod
+    def validate(cls, v: str):
+        hours, minutes = v.split(':')
         return datetime.timedelta(hours=int(hours), minutes=int(minutes))
 
 
-class PlaceType(YamlStrEnum):
+class PlaceType(str, Enum):
     SIGN_POST = 'Rázcestník'
     POINT_OF_INTEREST = 'Zaujímavosť'
     MEMORY = 'Spomienka'
     SLEEPING_PLACE = 'Prespávanie'
 
+    @property
+    def icon(self):
+        return {
+            PlaceType.SIGN_POST: 'signpost',
+            PlaceType.SLEEPING_PLACE: 'nightshelter',
+            PlaceType.POINT_OF_INTEREST: 'hiking'
+        }[self]
 
-class TravelBy(YamlStrEnum):
+
+class PointOfInterest(BaseModel):
+    name: str
+    type: PlaceType
+    description: str | None = None
+    lat: Decimal
+    lon: Decimal
+    elevation: Decimal
+
+
+class TravelBy(str, Enum):
     FOOT = 'foot'
     CAR = 'car'
     BIKE = 'bike'
     PUBLIC_TRANSPORT = 'pt'
 
 
-class Place(YamlModel):
+class Place(BaseModel):
     name: str
     rest_time: Time
     type: PlaceType
-    description: str = None
+    description: str | None = None
+    ref: str | None = None
 
-    @validator('rest_time')
-    def _check_start_at(cls, v: str) -> Time:  # noqa
-        """You can add your normal pydantic validators, like this one."""
-        return Time(v)
+    # @validator('rest_time')
+    # @classmethod
+    # def _check_start_at(cls, v: str) -> Time:  # noqa
+    #     """You can add your normal pydantic validators, like this one."""
+    #     return Time(v)
 
 
-class Segment(YamlModel):
+class Segment(BaseModel):
     name: str
     time: Time
     travel_by: TravelBy
 
-    @validator('time')
-    def _check_time(cls, v: str) -> Time:  # noqa
-        """You can add your normal pydantic validators, like this one."""
-        return Time(v)
+    # @validator('time')
+    # @classmethod
+    # def _check_time(cls, v: str) -> Time:  # noqa
+    #     """You can add your normal pydantic validators, like this one."""
+    #     return Time(v)
 
 
-class HikePlan(YamlModel):
+class HikePlan(BaseModel):
     name: str
     date: datetime.date
     start_at: Time
@@ -65,10 +100,11 @@ class HikePlan(YamlModel):
     segments: List[Segment]
     places: List[Place]
 
-    @validator('start_at')
-    def _check_start_at(cls, v: str) -> Time:  # noqa
-        """You can add your normal pydantic validators, like this one."""
-        return Time(v)
+    # @validator('start_at')
+    # @classmethod
+    # def _check_start_at(cls, v: str) -> Time:  # noqa
+    #     """You can add your normal pydantic validators, like this one."""
+    #     return Time(v)
 
 
 class HikeStats(NamedTuple):
@@ -79,9 +115,9 @@ class HikeStats(NamedTuple):
 
 
 class IterinaryPoint(NamedTuple):
-    from_time: datetime.time
+    from_time: Time
     to: datetime.time
-    time: datetime.timedelta
+    time: Time
     name: str
     description: Optional[str] = None
     travel_by: Optional[TravelBy] = None
@@ -89,11 +125,13 @@ class IterinaryPoint(NamedTuple):
     ref: Optional[str] = None
 
 
-class Hike:
-    def __init__(self, slug: str, plan: HikePlan, gpx_track: GPX):
-        self.plan = plan
-        self.slug = slug
-        self.gpx_track = gpx_track
+class Hike(BaseModel):
+    plan: HikePlan
+    gpx_track: GPX
+    slug: str
+
+    class Config:
+        arbitrary_types_allowed = True
 
     @staticmethod
     def get_folder(name: str) -> str:
@@ -114,15 +152,16 @@ class Hike:
     def from_folder(cls, name: str):
         """Load hike from folder"""
         hike_path = cls.get_folder(name)
-        plan = HikePlan.parse_file(os.path.join(hike_path, 'plan.yaml'))
+        with open(os.path.join(hike_path, 'plan.yaml'), 'r', encoding='utf-8') as plan_file:
+            plan = parse_yaml_file_as(HikePlan, plan_file)
         with open(os.path.join(hike_path, 'hike.gpx'), 'r', encoding='utf-8') as gpx_file:
             gpx_track = gpxpy.parse(gpx_file)
-        return Hike(name, plan, gpx_track)
+        return Hike(slug=name, plan=plan, gpx_track=gpx_track)
 
     def save(self):
         """Save hike to folder"""
         with open(os.path.join(self.folder, 'plan.yaml'), 'w', encoding='utf-8') as plan_file:
-            plan_file.write(self.plan.yaml())
+            to_yaml_file(plan_file, self.plan, indent=2, sequence_indent=4)
         with open(os.path.join(self.folder, 'hike.gpx'), 'w', encoding='utf-8') as gpx_file:
             gpx_file.write(self.gpx_track.to_xml())
 
@@ -147,12 +186,12 @@ class Hike:
             downhill=downhill
         )
 
-    def get_iterinary(self, start_time: Time) -> List[IterinaryPoint]:
+    def get_iterinary(self, start_time: datetime.timedelta) -> List[IterinaryPoint]:
         """Get iterinary"""
         schedule = []
-        current_time = start_time.time
+        current_time = start_time
         for i, (place, segment) in enumerate(zip(self.plan.places[:-1], self.plan.segments)):
-            delta = place.rest_time.time
+            delta = place.rest_time
             segment_stats = self.get_segment_stats(i)
             schedule.append(
                 IterinaryPoint(
@@ -165,7 +204,7 @@ class Hike:
 
                 ))
             current_time += delta
-            delta = segment.time.time
+            delta = segment.time
             schedule.append(IterinaryPoint(
                 from_time=format_timedelta(current_time),
                 to=format_timedelta(current_time+delta),
@@ -194,11 +233,20 @@ class Hike:
         serialized['stats'] = self.get_stats()
         return serialized
 
+    @classmethod
+    def create(cls, folder_name: str) -> 'Hike':
+        """Create new Hike"""
+        hike_folder = Hike.get_folder(folder_name)
+        with open(os.path.join(hike_folder, 'route.gpx'), 'r', encoding='utf-8') as gpx_file:
+            track = gpxpy.parse(gpx_file)
+        with open(os.path.join(hike_folder, 'waypoints.gpx'), 'r', encoding='utf-8') as gpx_file:
+            waypoints = gpxpy.parse(gpx_file)
+        new_gpx = segment_by_waypoints(track, waypoints)
+        plan = cls.generate_plan(new_gpx)
+        return cls(slug=folder_name, plan=plan, gpx_track=new_gpx)
 
-class HikeFactory:
-
-    @staticmethod
-    def generate_metadata_dict(hike: GPX):
+    @classmethod
+    def generate_plan(cls, hike: GPX) -> HikePlan:
         places = []
         segments = []
         for waypoint in hike.waypoints:
@@ -224,37 +272,62 @@ class HikeFactory:
             tags=[],
             with_who=[],
             date=datetime.date.today(),
-            start_at='9:00'
+            start_at='09:00'
         )
 
-    @staticmethod
-    def segment_by_waypoints(track: GPX, waypoints: GPX):
-        """Divide track by waypoints"""
-        segments = []
-        last_point = 0
-        for waypoint in waypoints.waypoints[1:-1]:
-            point_on_track = track.get_nearest_location(waypoint)
-            segments.append(
-                GPXTrackSegment(
-                    track.tracks[0].segments[0].points[last_point:point_on_track.point_no]
-                )
-            )
-            last_point = point_on_track.point_no
-        new_file = GPX()
-        new_track = GPXTrack()
-        new_track.segments = segments
-        new_file.tracks = [new_track]
-        new_file.waypoints = waypoints.waypoints
-        return new_file
 
-    @classmethod
-    def create(cls, folder_name: str) -> Hike:
-        """Create new Hike"""
-        hike_folder = Hike.get_folder(folder_name)
-        with open(os.path.join(hike_folder, 'route.gpx'), 'r', encoding='utf-8') as gpx_file:
-            track = gpxpy.parse(gpx_file)
-        with open(os.path.join(hike_folder, 'waypoints.gpx'), 'r', encoding='utf-8') as gpx_file:
+class Plan(BaseModel):
+    pass
+
+
+class DataStorage(BaseModel):
+    points: dict[str, PointOfInterest] = {}
+    hikes: dict[str, Hike] = {}
+    plans: dict[str, Plan] = {}
+
+    def load(self):
+        for name in os.listdir(os.path.join(DATA_DIR, 'hikes')):
+            try:
+                self.hikes[name] = Hike.from_folder(name)
+            except:
+                pass
+        with open(os.path.join(DATA_DIR, 'points', 'points.yaml'), 'r', encoding='utf-8') as points_file:
+            self.points = parse_yaml_file_as(
+                dict[str, PointOfInterest], points_file)
+
+    def save(self):
+        for hike in self.hikes.values():
+            hike.save()
+        with open(os.path.join(DATA_DIR, 'points', 'points.yaml'), 'w', encoding='utf-8') as points_file:
+            yaml.dump({name: json.loads(point.model_dump_json()) for name,
+                      point in self.points.items()}, points_file, allow_unicode=True)
+
+    def init_hike(self, name: str):
+        os.mkdir(os.path.join(DATA_DIR, 'hikes', name))
+        print(f'Sucessfully created hike with name: {name}')
+
+    def create_from_gpx(self, name: str):
+        self.hikes[name] = Hike.create(name)
+
+    def add_point(self, point: PointOfInterest):
+        slug = slugify(point.name)
+        if slug in self.points:
+            raise ValueError(f'Slug {slug} already exists')
+        # TODO: Add proximity warnings
+        self.points[slug] = point
+
+    def add_point_from_file(self, file_name):
+        with open(file_name, 'r', encoding='utf-8') as gpx_file:
             waypoints = gpxpy.parse(gpx_file)
-        new_gpx = cls.segment_by_waypoints(track, waypoints)
-        plan = cls.generate_metadata_dict(new_gpx)
-        return Hike(folder_name, plan, new_gpx)
+            for waypoint in waypoints.waypoints:
+                self.add_point(
+                    PointOfInterest(
+                        name=waypoint.name,
+                        type=PlaceType.SIGN_POST,
+                        description=None,
+                        lat=waypoint.latitude,
+                        lon=waypoint.longitude,
+                        elevation=waypoint.elevation
+
+                    )
+                )

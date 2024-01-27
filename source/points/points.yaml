@@ -1,8 +1,21 @@
-places:
-  spiaci-mnich:
-    name: Spiaci mních
-    type: poi
-    description: Skalný útvar
-    lat: 49.209835
-    lon: 20.932406
-    elevation: 672.856567
+Sivec:
+  description: null
+  elevation: '763.169739'
+  lat: '48.848898'
+  lon: '21.099761'
+  name: Sivec
+  type: Rázcestník
+SpiaciMnich:
+  description: Skalný útvar
+  elevation: '672.856567'
+  lat: '49.209835'
+  lon: '20.932406'
+  name: Spiaci mních
+  type: Zaujímavosť
+VelkaRuzinskaJaskyna:
+  description: null
+  elevation: '634.967041'
+  lat: '48.837253'
+  lon: '21.117883'
+  name: Veľká Ružínska jaskyňa
+  type: Rázcestník

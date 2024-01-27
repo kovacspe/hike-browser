@@ -1,6 +1,8 @@
-import os
-import unidecode
 import datetime
+import os
+
+import unidecode
+from gpxpy.gpx import GPX, GPXTrack, GPXTrackSegment
 
 
 def is_group(folder_path: str) -> bool:
@@ -32,3 +34,23 @@ def parse_timedelta(time):
 
 def format_timedelta(time: datetime.timedelta):
     return ':'.join(str(time).split(':')[:2])
+
+
+def segment_by_waypoints(track: GPX, waypoints: GPX):
+    """Divide track by waypoints"""
+    segments = []
+    last_point = 0
+    for waypoint in waypoints.waypoints[1:-1]:
+        point_on_track = track.get_nearest_location(waypoint)
+        segments.append(
+            GPXTrackSegment(
+                track.tracks[0].segments[0].points[last_point:point_on_track.point_no]
+            )
+        )
+        last_point = point_on_track.point_no
+    new_file = GPX()
+    new_track = GPXTrack()
+    new_track.segments = segments
+    new_file.tracks = [new_track]
+    new_file.waypoints = waypoints.waypoints
+    return new_file
