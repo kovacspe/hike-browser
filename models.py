@@ -72,23 +72,11 @@ class Place(BaseModel):
     description: str | None = None
     ref: str | None = None
 
-    # @validator('rest_time')
-    # @classmethod
-    # def _check_start_at(cls, v: str) -> Time:  # noqa
-    #     """You can add your normal pydantic validators, like this one."""
-    #     return Time(v)
-
 
 class Segment(BaseModel):
     name: str
     time: Time
     travel_by: TravelBy
-
-    # @validator('time')
-    # @classmethod
-    # def _check_time(cls, v: str) -> Time:  # noqa
-    #     """You can add your normal pydantic validators, like this one."""
-    #     return Time(v)
 
 
 class HikePlan(BaseModel):
@@ -99,12 +87,6 @@ class HikePlan(BaseModel):
     tags: List[str]
     segments: List[Segment]
     places: List[Place]
-
-    # @validator('start_at')
-    # @classmethod
-    # def _check_start_at(cls, v: str) -> Time:  # noqa
-    #     """You can add your normal pydantic validators, like this one."""
-    #     return Time(v)
 
 
 class HikeStats(NamedTuple):
