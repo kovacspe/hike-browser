@@ -41,6 +41,7 @@ class PlaceType(str, Enum):
     MEMORY = 'memory'
     SLEEPING_PLACE = 'sleep'
     WELL = 'well'
+    CITY = 'city'
 
     @property
     def icon(self):
@@ -48,7 +49,8 @@ class PlaceType(str, Enum):
             PlaceType.SIGN_POST: 'signpost',
             PlaceType.SLEEPING_PLACE: 'night_shelter',
             PlaceType.POINT_OF_INTEREST: 'hiking',
-            PlaceType.WELL: 'water_drop'
+            PlaceType.WELL: 'water_drop',
+            PlaceType.CITY: 'location_city'
         }[self]
 
     @classmethod
