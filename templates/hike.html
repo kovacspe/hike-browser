@@ -34,26 +34,31 @@
                 </table>
             </div>
             <div>
-                <h2>Itenerár:</h2>
+                <h2>Itinerár:</h2>
                 <table id="iterinary">
+                    <tr>
+                        <th></th>
+                        <th>Od</th>
+                        <th></th>
+                        <th>Do</th>
+                        <th></th>
+                        <th><span class="material-icons">north_east</span></th>
+                        <th><span class="material-icons">south_east</span></th>
+                        <th><span class="material-icons">route</span></th>
+                    </tr>
                     {% for point in schedule %}
                     <tr>
                         <td>
-                            {% if point.travel_by=='foot' %}
-                            <span class="material-icons">hiking</span>
-                            {% elif point.travel_by=='car' %}
-                            <span class="material-icons">car</span>
-                            {% endif %}
+                            <span class="material-icons">{{point.icon}}</span>
                         </td>
-
-                        <td>{% if point.from %}{{point.from}}{% endif %}</td>
-                        <td>{% if point.to and point.from %}-{% endif %}</td>
+                        <td>{% if point.from_time %}{{point.from_time}}{% endif %}</td>
+                        <td>{% if point.to and point.from_time %}-{% endif %}</td>
                         <td>{% if point.to %}{{point.to}}{% endif %}</td>
                         <td>{{point.name}}</td>
                         {% if point.stats %}
-                        <td>{{point.stats.uphill|int}}</td>
-                        <td>{{point.stats.downhill|int}}</td>
-                        <td>{{'%0.2f'| format(point.stats.length|float)}}</td>
+                        <td>{{point.stats.uphill|int}} m</td>
+                        <td>{{point.stats.downhill|int}} m</td>
+                        <td>{{'%0.2f'| format(point.stats.length|float)}} km</td>
 
                         {% else %}
                         <td colspan="3">{{point.description or ''}}</td>
@@ -77,15 +82,26 @@
         const tiles = L.tileLayer('https://outdoor.tiles.freemap.sk/{z}/{x}/{y}', {
             maxZoom: 19
         }).addTo(map);
+        var latlngs = [
+            {% for point in track %}
+        [{{ point.latitude }}, {{ point.longitude }}],
 
-        var greenIcon = L.divIcon({
-            className: 'material-icons',
-            html: `<span class="material-icons">hiking</span>`
-        })
-        L.marker([49.151400, 20.962358], { icon: greenIcon }).addTo(map);
-        L.marker([49.151400, 21.983368], { icon: greenIcon }).addTo(map);
-        L.marker([49.151400, 21.004378], { icon: greenIcon }).addTo(map);
+            {% endfor %}
+        ];
+        var polyline = L.polyline(latlngs, { color: 'blue' }).addTo(map);
 
+
+        {% for place, point in waypoints %}
+        var marker = L.marker(["{{ point.lat }}", "{{ point.lon }}"], {
+            icon: L.divIcon({
+                className: 'material-icons',
+                html: `<span class="material-icons">{{point.type.icon}}</span>`
+            })
+        });
+        marker.addTo(map);
+        marker.bindPopup("<b>{{point.name}}</b><br>{{point.description}}")
+        {% endfor %}
+        map.fitBounds(polyline.getBounds());
 
 
     </script>

@@ -109,7 +109,7 @@
   }
 }
 
-#iterinary tr:nth-child(even) {
+#iterinary tr:nth-child(odd) {
   background-color: #6be363;
 }
 

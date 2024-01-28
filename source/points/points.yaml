@@ -1,21 +1,63 @@
+2023-LipanyMincolKamenickyHrad:
+  description: null
+  elevation: "693.811279"
+  lat: "49.196453"
+  lon: "20.97059"
+  name: Kamenický hrad
+  type: poi
+2023-LipanyMincolLipany:
+  description: null
+  elevation: "378.151642"
+  lat: "49.151042"
+  lon: "20.964112"
+  name: Lipany
+  type: city
+2023-LipanyMincolPramenVSedleBalazka:
+  description: null
+  elevation: "529.954346"
+  lat: "49.180458"
+  lon: "20.934916"
+  name: Prameň v sedle Balážka
+  type: well
+2023-LipanyMincolRozhladnaNaBalazke:
+  description: null
+  elevation: "585.494751"
+  lat: "49.174602"
+  lon: "20.948971"
+  name: Rozhľadňa na Balážke
+  type: sign
+2023-LipanyMincolSokoliaSkala:
+  description: null
+  elevation: "721.712463"
+  lat: "49.214194"
+  lon: "20.95838"
+  name: Sokolia skala
+  type: sign
+2023-LipanyMincolSpiaciMnich:
+  description: null
+  elevation: "672.856567"
+  lat: "49.209835"
+  lon: "20.932406"
+  name: Spiaci mních
+  type: sign
+2023-LipanyMincolUtulnaPodMincolom:
+  description: null
+  elevation: "991.97345"
+  lat: "49.22753"
+  lon: "20.996425"
+  name: Útulňa pod Minčolom
+  type: sleep
 Sivec:
   description: null
-  elevation: '763.169739'
-  lat: '48.848898'
-  lon: '21.099761'
+  elevation: "763.169739"
+  lat: "48.848898"
+  lon: "21.099761"
   name: Sivec
-  type: Rázcestník
-SpiaciMnich:
-  description: Skalný útvar
-  elevation: '672.856567'
-  lat: '49.209835'
-  lon: '20.932406'
-  name: Spiaci mních
-  type: Zaujímavosť
+  type: sign
 VelkaRuzinskaJaskyna:
   description: null
-  elevation: '634.967041'
-  lat: '48.837253'
-  lon: '21.117883'
+  elevation: "634.967041"
+  lat: "48.837253"
+  lon: "21.117883"
   name: Veľká Ružínska jaskyňa
-  type: Rázcestník
+  type: sign

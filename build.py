@@ -39,10 +39,16 @@ class PageBuilder:
             html_file.write(template.render(**data))
 
     def build_hike_page(self, name: str):
+        hike = self.storage.hikes[name]
         template = env.get_template('hike.html')
-        hike = Hike.from_folder(name)
         with open(os.path.join(self.output_dir, 'hike', f'{name}.html'), 'w', encoding='utf-8') as html_file:
-            html_file.write(template.render(**hike.as_dict()))
+            html_file.write(template.render({
+                'name': hike.plan.name,
+                'stats': hike.get_stats(),
+                'schedule': hike.get_iterinary(hike.plan.start_at, self.storage),
+                'track': [point for point, _, _ in hike.track.walk()],
+                'waypoints': hike.get_waypoints(self.storage)
+            }))
 
     def build_pages(self):
         """Build all pages"""

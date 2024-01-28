@@ -7,10 +7,11 @@ from typing import List, NamedTuple, Optional
 
 import gpxpy
 import yaml
-from gpxpy.gpx import GPX, GPXTrack, GPXTrackSegment
-from pydantic import BaseModel, GetCoreSchemaHandler, validator
+from gpxpy.gpx import GPX, GPXTrack, GPXTrackSegment, GPXWaypoint
+from pydantic import BaseModel, GetCoreSchemaHandler
 from pydantic_core import core_schema
 from pydantic_yaml import parse_yaml_file_as, to_yaml_file
+from unidecode import unidecode
 
 from settings import DATA_DIR
 from utils import format_timedelta, segment_by_waypoints, slugify
@@ -35,18 +36,32 @@ class Time(datetime.timedelta):
 
 
 class PlaceType(str, Enum):
-    SIGN_POST = 'Rázcestník'
-    POINT_OF_INTEREST = 'Zaujímavosť'
-    MEMORY = 'Spomienka'
-    SLEEPING_PLACE = 'Prespávanie'
+    SIGN_POST = 'sign'
+    POINT_OF_INTEREST = 'poi'
+    MEMORY = 'memory'
+    SLEEPING_PLACE = 'sleep'
+    WELL = 'well'
 
     @property
     def icon(self):
         return {
             PlaceType.SIGN_POST: 'signpost',
-            PlaceType.SLEEPING_PLACE: 'nightshelter',
-            PlaceType.POINT_OF_INTEREST: 'hiking'
+            PlaceType.SLEEPING_PLACE: 'night_shelter',
+            PlaceType.POINT_OF_INTEREST: 'hiking',
+            PlaceType.WELL: 'water_drop'
         }[self]
+
+    @classmethod
+    def guess_from_name(cls, name: str):
+        normalized_name = unidecode(name).lower()
+
+        def has_keyword(*keywords):
+            return any(keyword in normalized_name for keyword in keywords)
+        if has_keyword('pramen', 'studna', 'studnicka'):
+            return PlaceType.WELL
+        if has_keyword('kemp', 'camp', 'utulna', 'chata'):
+            return PlaceType.SLEEPING_PLACE
+        return PlaceType.SIGN_POST
 
 
 class PointOfInterest(BaseModel):
@@ -57,6 +72,14 @@ class PointOfInterest(BaseModel):
     lon: Decimal
     elevation: Decimal
 
+    @property
+    def gpx(self) -> GPXWaypoint:
+        return GPXWaypoint(
+            latitude=float(self.lat),
+            longitude=float(self.lon),
+            elevation=float(self.elevation)
+        )
+
 
 class TravelBy(str, Enum):
     FOOT = 'foot'
@@ -64,11 +87,19 @@ class TravelBy(str, Enum):
     BIKE = 'bike'
     PUBLIC_TRANSPORT = 'pt'
 
+    @property
+    def icon(self):
+        return {
+            TravelBy.FOOT: 'hiking',
+            TravelBy.CAR: 'car',
+            TravelBy.BIKE: 'directions_bike',
+            TravelBy.PUBLIC_TRANSPORT: 'directions_bus',
+        }[self]
+
 
 class Place(BaseModel):
-    name: str
     rest_time: Time
-    type: PlaceType
+    name: str
     description: str | None = None
     ref: str | None = None
 
@@ -105,6 +136,7 @@ class IterinaryPoint(NamedTuple):
     travel_by: Optional[TravelBy] = None
     stats: Optional[HikeStats] = None
     ref: Optional[str] = None
+    icon: str | None = None
 
 
 class Hike(BaseModel):
@@ -138,6 +170,7 @@ class Hike(BaseModel):
             plan = parse_yaml_file_as(HikePlan, plan_file)
         with open(os.path.join(hike_path, 'hike.gpx'), 'r', encoding='utf-8') as gpx_file:
             gpx_track = gpxpy.parse(gpx_file)
+
         return Hike(slug=name, plan=plan, gpx_track=gpx_track)
 
     def save(self):
@@ -168,21 +201,23 @@ class Hike(BaseModel):
             downhill=downhill
         )
 
-    def get_iterinary(self, start_time: datetime.timedelta) -> List[IterinaryPoint]:
+    def get_iterinary(self, start_time: datetime.timedelta, storage: 'DataStorage') -> List[IterinaryPoint]:
         """Get iterinary"""
         schedule = []
         current_time = start_time
         for i, (place, segment) in enumerate(zip(self.plan.places[:-1], self.plan.segments)):
             delta = place.rest_time
             segment_stats = self.get_segment_stats(i)
+            point = storage.points[place.ref]
             schedule.append(
                 IterinaryPoint(
                     from_time=format_timedelta(
-                        current_time) if current_time else None,
+                        current_time) if len(schedule) > 0 else None,
                     to=format_timedelta(current_time+delta),
                     name=place.name,
                     description=place.description,
-                    time=delta
+                    time=delta,
+                    icon=point.type.icon
 
                 ))
             current_time += delta
@@ -193,50 +228,53 @@ class Hike(BaseModel):
                 name=segment.name,
                 travel_by=segment.travel_by,
                 time=delta,
-                stats=segment_stats
+                stats=segment_stats,
+                icon=segment.travel_by.icon
 
             ))
 
             current_time += delta
         last_place = self.plan.places[-1]
+        point = storage.points[last_place.ref]
         schedule.append(IterinaryPoint(
             from_time=format_timedelta(current_time),
             to=None,
             name=last_place.name,
             description=last_place.description,
-            time=delta
+            time=delta,
+            icon=point.type.icon
         ))
         return schedule
 
-    def as_dict(self):
-        """Serialize to dictionary"""
-        serialized = {}
-        serialized['schedule'] = self.get_iterinary(self.plan.start_at)
-        serialized['stats'] = self.get_stats()
-        return serialized
+    def get_waypoints(self, storage: 'DataStorage') -> list[tuple[Place, Optional[PointOfInterest]]]:
+        return [
+            (place, storage.points.get(place.ref, None))
+            for place in self.plan.places
+        ]
 
     @classmethod
-    def create(cls, folder_name: str) -> 'Hike':
+    def create(cls, folder_name: str, waypoints: dict[str, PointOfInterest]) -> 'Hike':
         """Create new Hike"""
         hike_folder = Hike.get_folder(folder_name)
         with open(os.path.join(hike_folder, 'route.gpx'), 'r', encoding='utf-8') as gpx_file:
             track = gpxpy.parse(gpx_file)
-        with open(os.path.join(hike_folder, 'waypoints.gpx'), 'r', encoding='utf-8') as gpx_file:
-            waypoints = gpxpy.parse(gpx_file)
-        new_gpx = segment_by_waypoints(track, waypoints)
-        plan = cls.generate_plan(new_gpx)
+
+        new_gpx = segment_by_waypoints(
+            track, [waypoint.gpx for waypoint in waypoints.values()]
+        )
+        plan = cls.generate_plan(new_gpx, waypoints)
         return cls(slug=folder_name, plan=plan, gpx_track=new_gpx)
 
     @classmethod
-    def generate_plan(cls, hike: GPX) -> HikePlan:
+    def generate_plan(cls, hike: GPX, waypoints: dict[str, PointOfInterest]) -> HikePlan:
         places = []
         segments = []
-        for waypoint in hike.waypoints:
+        for ref, waypoint in waypoints.items():
             places.append(
                 Place(
                     name=waypoint.name,
                     rest_time='00:00',
-                    type=PlaceType.SIGN_POST
+                    ref=ref
                 )
             )
         for i, _ in enumerate(hike.tracks[0].segments):
@@ -289,27 +327,38 @@ class DataStorage(BaseModel):
         print(f'Sucessfully created hike with name: {name}')
 
     def create_from_gpx(self, name: str):
-        self.hikes[name] = Hike.create(name)
+        """Create hikw from gpx files"""
+        hike_folder = Hike.get_folder(name)
+        new_points_refs = self.add_point_from_file(
+            os.path.join(hike_folder, 'waypoints.gpx'), prefix=name)
+        self.hikes[name] = Hike.create(name, new_points_refs)
 
-    def add_point(self, point: PointOfInterest):
+    def add_point(self, point: PointOfInterest, prefix: str):
+        """Add point"""
         slug = slugify(point.name)
+        slug = '-'.join([prefix, slug])
         if slug in self.points:
-            raise ValueError(f'Slug {slug} already exists')
+            print(f'Slug {slug} already exists')
+            return slug
         # TODO: Add proximity warnings
         self.points[slug] = point
+        return slug
 
-    def add_point_from_file(self, file_name):
+    def add_point_from_file(self, file_name: str, prefix: str = '') -> dict[str, PointOfInterest]:
+        """Add points from gpx file"""
+        new_points = {}
         with open(file_name, 'r', encoding='utf-8') as gpx_file:
             waypoints = gpxpy.parse(gpx_file)
             for waypoint in waypoints.waypoints:
-                self.add_point(
-                    PointOfInterest(
-                        name=waypoint.name,
-                        type=PlaceType.SIGN_POST,
-                        description=None,
-                        lat=waypoint.latitude,
-                        lon=waypoint.longitude,
-                        elevation=waypoint.elevation
+                new_point = PointOfInterest(
+                    name=waypoint.name,
+                    type=PlaceType.guess_from_name(waypoint.name),
+                    description=None,
+                    lat=waypoint.latitude,
+                    lon=waypoint.longitude,
+                    elevation=waypoint.elevation
 
-                    )
                 )
+                new_points[self.add_point(new_point, prefix)] = new_point
+
+        return new_points
