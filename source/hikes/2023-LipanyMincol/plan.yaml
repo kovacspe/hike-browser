@@ -1,5 +1,5 @@
 date: '2024-01-28'
-name: Name
+name: Lipany - Minčol
 places:
   - description: null
     name: Lipany
@@ -49,5 +49,8 @@ segments:
     time: 2:00
     travel_by: foot
 start_at: 9:00
-tags: []
+tags:
+  - Slovensko
+  - Čergov
+  - Minčol
 with_who: []

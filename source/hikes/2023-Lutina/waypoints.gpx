@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="49.227485" lon="20.996234">
+		<ele>994.325317</ele>
+		<name>Útulňa Minčol</name>
+	</wpt>
+	<wpt lat="49.230489" lon="20.994231">
+		<ele>1124.395142</ele>
+		<name>Minčol vyhliadka</name>
+	</wpt>
+	<wpt lat="49.234546" lon="20.988971">
+		<ele>1149.111694</ele>
+		<name>Minčol</name>
+	</wpt>
+	<wpt lat="49.229209" lon="21.001179">
+		<ele>1087.936035</ele>
+		<name>Lazy</name>
+	</wpt>
+	<wpt lat="49.214341" lon="21.028374">
+		<ele>966.431519</ele>
+		<name>Sedlo Ždiare</name>
+	</wpt>
+	<wpt lat="49.190009" lon="21.031442">
+		<ele>727.537842</ele>
+		<name>Za hradom</name>
+	</wpt>
+	<wpt lat="49.190016" lon="21.039693">
+		<ele>757.038269</ele>
+		<name>Hanigovský hrad</name>
+	</wpt>
+	<wpt lat="49.174823" lon="21.048265">
+		<ele>501.111786</ele>
+		<name>Ľutina kostoly</name>
+	</wpt>
+	<wpt lat="49.167184" lon="21.045100">
+		<ele>447.410400</ele>
+		<name>Ľutina miniskanzen</name>
+	</wpt>
+</gpx>
+

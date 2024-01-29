@@ -1,0 +1,70 @@
+date: '2024-01-29'
+name: Útulňa pod Minčolom - Ľutina
+places:
+  - description: null
+    name: Útulňa Minčol
+    ref: 2023-LipanyMincolUtulnaPodMincolom
+    rest_time: 0:00
+  - description: null
+    name: Minčol vyhliadka
+    ref: 2023-Lutina-MincolVyhliadka
+    rest_time: 0:15
+  - description: null
+    name: Minčol
+    ref: 2023-Lutina-Mincol
+    rest_time: 0:15
+  - description: null
+    name: Lazy
+    ref: 2023-Lutina-Lazy
+    rest_time: 0:05
+  - description: null
+    name: Sedlo Ždiare
+    ref: 2023-Lutina-SedloZdiare
+    rest_time: 0:30
+  - description: null
+    name: Za hradom
+    ref: 2023-Lutina-ZaHradom
+    rest_time: 0:05
+  - description: null
+    name: Hanigovský hrad
+    ref: 2023-Lutina-HanigovskyHrad
+    rest_time: 0:30
+  - description: null
+    name: Ľutina kostoly
+    ref: 2023-Lutina-LutinaKostoly
+    rest_time: 0:05
+  - description: null
+    name: Ľutina miniskanzen
+    ref: 2023-Lutina-LutinaMiniskanzen
+    rest_time: 0:45
+segments:
+  - name: Útulňa Minčol - Minčol vyhliadka
+    time: 0:25
+    travel_by: foot
+  - name: Minčol vyhliadka - Minčol
+    time: 0:15
+    travel_by: foot
+  - name: Minčol - Lazy
+    time: 0:20
+    travel_by: foot
+  - name: Lazy - Sedlo Ždiare
+    time: 0:55
+    travel_by: foot
+  - name: Sedlo Ždiare - Za hradom
+    time: 0:55
+    travel_by: foot
+  - name: Za hradom - Hanigovský hrad
+    time: 0:15
+    travel_by: foot
+  - name: Hanigovský hrad - Ľutina kostoly
+    time: 0:40
+    travel_by: foot
+  - name: Ľutina kostoly - Ľutina miniskanzen
+    time: 0:20
+    travel_by: foot
+start_at: 10:00
+tags:
+  - Slovensko
+  - Čergov
+  - Minčol
+with_who: []

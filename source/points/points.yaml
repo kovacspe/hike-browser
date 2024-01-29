@@ -1,63 +1,119 @@
 2023-LipanyMincolKamenickyHrad:
   description: null
-  elevation: "693.811279"
-  lat: "49.196453"
-  lon: "20.97059"
+  elevation: '693.811279'
+  lat: '49.196453'
+  lon: '20.97059'
   name: Kamenický hrad
   type: poi
 2023-LipanyMincolLipany:
   description: null
-  elevation: "378.151642"
-  lat: "49.151042"
-  lon: "20.964112"
+  elevation: '378.151642'
+  lat: '49.151042'
+  lon: '20.964112'
   name: Lipany
   type: city
 2023-LipanyMincolPramenVSedleBalazka:
   description: null
-  elevation: "529.954346"
-  lat: "49.180458"
-  lon: "20.934916"
+  elevation: '529.954346'
+  lat: '49.180458'
+  lon: '20.934916'
   name: Prameň v sedle Balážka
   type: well
 2023-LipanyMincolRozhladnaNaBalazke:
   description: null
-  elevation: "585.494751"
-  lat: "49.174602"
-  lon: "20.948971"
+  elevation: '585.494751'
+  lat: '49.174602'
+  lon: '20.948971'
   name: Rozhľadňa na Balážke
   type: sign
 2023-LipanyMincolSokoliaSkala:
   description: null
-  elevation: "721.712463"
-  lat: "49.214194"
-  lon: "20.95838"
+  elevation: '721.712463'
+  lat: '49.214194'
+  lon: '20.95838'
   name: Sokolia skala
   type: sign
 2023-LipanyMincolSpiaciMnich:
   description: null
-  elevation: "672.856567"
-  lat: "49.209835"
-  lon: "20.932406"
+  elevation: '672.856567'
+  lat: '49.209835'
+  lon: '20.932406'
   name: Spiaci mních
   type: sign
 2023-LipanyMincolUtulnaPodMincolom:
   description: null
-  elevation: "991.97345"
-  lat: "49.22753"
-  lon: "20.996425"
+  elevation: '991.97345'
+  lat: '49.22753'
+  lon: '20.996425'
   name: Útulňa pod Minčolom
   type: sleep
+2023-Lutina-HanigovskyHrad:
+  description: null
+  elevation: '757.038269'
+  lat: '49.190016'
+  lon: '21.039693'
+  name: Hanigovský hrad
+  type: sign
+2023-Lutina-Lazy:
+  description: null
+  elevation: '1087.936035'
+  lat: '49.229209'
+  lon: '21.001179'
+  name: Lazy
+  type: sign
+2023-Lutina-LutinaKostoly:
+  description: null
+  elevation: '501.111786'
+  lat: '49.174823'
+  lon: '21.048265'
+  name: Ľutina kostoly
+  type: sign
+2023-Lutina-LutinaMiniskanzen:
+  description: null
+  elevation: '447.4104'
+  lat: '49.167184'
+  lon: '21.0451'
+  name: Ľutina miniskanzen
+  type: sign
+2023-Lutina-Mincol:
+  description: null
+  elevation: '1149.111694'
+  lat: '49.234546'
+  lon: '20.988971'
+  name: Minčol
+  type: sign
+2023-Lutina-MincolVyhliadka:
+  description: null
+  elevation: '1124.395142'
+  lat: '49.230489'
+  lon: '20.994231'
+  name: Minčol vyhliadka
+  type: sign
+2023-Lutina-SedloZdiare:
+  description: null
+  elevation: '966.431519'
+  lat: '49.214341'
+  lon: '21.028374'
+  name: Sedlo Ždiare
+  type: sign
+2023-Lutina-ZaHradom:
+  description: null
+  elevation: '727.537842'
+  lat: '49.190009'
+  lon: '21.031442'
+  name: Za hradom
+  type: sign
 Sivec:
   description: null
-  elevation: "763.169739"
-  lat: "48.848898"
-  lon: "21.099761"
+  elevation: '763.169739'
+  lat: '48.848898'
+  lon: '21.099761'
   name: Sivec
   type: sign
 VelkaRuzinskaJaskyna:
   description: null
-  elevation: "634.967041"
-  lat: "48.837253"
-  lon: "21.117883"
+  elevation: '634.967041'
+  lat: '48.837253'
+  lon: '21.117883'
   name: Veľká Ružínska jaskyňa
   type: sign
