@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="49.433834" lon="18.880266">
+		<ele>459.699768</ele>
+		<name>Oščadnica</name>
+	</wpt>
+	<wpt lat="49.452523" lon="18.863465">
+		<ele>860.823486</ele>
+		<name>Javorské</name>
+	</wpt>
+	<wpt lat="49.443483" lon="18.787086">
+		<ele>415.693787</ele>
+		<name>Čadca</name>
+	</wpt>
+</gpx>
+

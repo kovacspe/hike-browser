@@ -1,0 +1,41 @@
+date: '2023-11-19'
+name: Planinka - Dechtice
+places:
+  - description: Stará vila prerobená na ubytovňu
+    name: Planinka
+    ref: 2023-Trnava-Planinka
+    rest_time: 0:00
+  - description: Pozostatky lesnej železničky prerobené na malú turistickú trať
+    name: Stará lesná železnica
+    ref: 2023-Trnava-StaraLesnaZeleznica
+    rest_time: 0:15
+  - description: Zrúcanina kostola a kláštora
+    name: Zrúcanina kláštora sv Kataríny Alexandrijskej
+    ref: 2023-Trnava-ZrucaninaKlastoraSvKatarinyAlexandrijskej
+    rest_time: 0:15
+  - description: null
+    name: Dechtice
+    ref: 2023-Trnava-Dechtice
+    rest_time: 0:00
+  - description: null
+    name: Trnava
+    ref: 2023-Trnava-Trnava
+    rest_time: 2:00
+segments:
+  - name: Planinka - Stará lesná železnica
+    time: 0:45
+    travel_by: foot
+  - name: Stará lesná železnica - Zrúcanina kláštora sv Kataríny Alexandrijskej
+    time: 0:05
+    travel_by: foot
+  - name: Zrúcanina kláštora sv Kataríny Alexandrijskej - Dechtice
+    time: 1:20
+    travel_by: foot
+  - name: Dechtice - Trnava
+    time: 0:20
+    travel_by: pt
+start_at: 10:00
+tags:
+  - Slovensko
+  - Karpaty
+with_who: []

@@ -42,15 +42,25 @@ class PlaceType(str, Enum):
     SLEEPING_PLACE = 'sleep'
     WELL = 'well'
     CITY = 'city'
+    VIEW = 'view'
+    TECH = 'tech'
+    CASTLE = 'castle'
+    CAVE = 'cave'
+    PEAK = 'peak'
 
     @property
     def icon(self):
         return {
             PlaceType.SIGN_POST: 'signpost',
             PlaceType.SLEEPING_PLACE: 'night_shelter',
-            PlaceType.POINT_OF_INTEREST: 'hiking',
+            PlaceType.POINT_OF_INTEREST: 'star',
             PlaceType.WELL: 'water_drop',
-            PlaceType.CITY: 'location_city'
+            PlaceType.CITY: 'location_city',
+            PlaceType.VIEW: 'panorama',
+            PlaceType.TECH: 'manufacturing',
+            PlaceType.CASTLE: 'castle',
+            PlaceType.CAVE: 'star',
+            PlaceType.PEAK: 'landscape'
         }[self]
 
     @classmethod
@@ -335,16 +345,35 @@ class DataStorage(BaseModel):
             os.path.join(hike_folder, 'waypoints.gpx'), prefix=name)
         self.hikes[name] = Hike.create(name, new_points_refs)
 
+    def find_possible_match(self, point: PointOfInterest, slug: str) -> Optional[str]:
+        for slug2, point2 in self.points.items():
+            if point2.gpx.distance_2d(point.gpx) < 200:
+                return slug2
+        for slug2, point2 in self.points.items():
+            if slug2.split('-')[-1] == slug:
+                return slug2
+        return None
+
     def add_point(self, point: PointOfInterest, prefix: str):
         """Add point"""
         slug = slugify(point.name)
+        possible_match = self.find_possible_match(point, slug)
         slug = '-'.join([prefix, slug])
-        if slug in self.points:
-            print(f'Slug {slug} already exists')
+        if possible_match:
+            print(
+                f'Looks like {slug} is similar to {possible_match}, to merge use:')
+            print(f'python manage.py merge-points {possible_match} {slug}')
             return slug
-        # TODO: Add proximity warnings
         self.points[slug] = point
         return slug
+
+    def merge_points(self, slug1: str, slug2: str):
+        for hike in self.hikes.values():
+            for place in hike.plan.places:
+                if place.ref == slug2:
+                    place.ref = slug1
+
+        del self.points[slug2]
 
     def add_point_from_file(self, file_name: str, prefix: str = '') -> dict[str, PointOfInterest]:
         """Add points from gpx file"""

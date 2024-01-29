@@ -1,10 +1,10 @@
 2023-LipanyMincolKamenickyHrad:
-  description: null
+  description: Zrúcanina Kamenického hradu s nádherným výhľadom
   elevation: '693.811279'
   lat: '49.196453'
   lon: '20.97059'
   name: Kamenický hrad
-  type: poi
+  type: castle
 2023-LipanyMincolLipany:
   description: null
   elevation: '378.151642'
@@ -20,40 +20,42 @@
   name: Prameň v sedle Balážka
   type: well
 2023-LipanyMincolRozhladnaNaBalazke:
-  description: null
+  description: Drevená výhliadková veža
   elevation: '585.494751'
   lat: '49.174602'
   lon: '20.948971'
   name: Rozhľadňa na Balážke
-  type: sign
+  type: view
 2023-LipanyMincolSokoliaSkala:
-  description: null
+  description: Skalné okno
   elevation: '721.712463'
   lat: '49.214194'
   lon: '20.95838'
   name: Sokolia skala
-  type: sign
+  type: view
 2023-LipanyMincolSpiaciMnich:
-  description: null
+  description: Sklaný objekt vyzerujúci ako spiaci obor. Pekný výhľad a prechodná
+    jaskyňa zo spodu objektu navrch.
   elevation: '672.856567'
   lat: '49.209835'
   lon: '20.932406'
   name: Spiaci mních
-  type: sign
+  type: poi
 2023-LipanyMincolUtulnaPodMincolom:
-  description: null
+  description: Veľká útulňa s pieckou. Je zamknutá a kľuče má miestna turistická organizácia.
+    Požičiava chatu za malý poplatok.
   elevation: '991.97345'
   lat: '49.22753'
   lon: '20.996425'
   name: Útulňa pod Minčolom
   type: sleep
 2023-Lutina-HanigovskyHrad:
-  description: null
+  description: Zrúcanina Hangovského hradu
   elevation: '757.038269'
   lat: '49.190016'
   lon: '21.039693'
   name: Hanigovský hrad
-  type: sign
+  type: castle
 2023-Lutina-Lazy:
   description: null
   elevation: '1087.936035'
@@ -62,33 +64,33 @@
   name: Lazy
   type: sign
 2023-Lutina-LutinaKostoly:
-  description: null
+  description: V Ľutine je veľmi veľa kostolov, kostolíkov a kaplniek.
   elevation: '501.111786'
   lat: '49.174823'
   lon: '21.048265'
-  name: Ľutina kostoly
-  type: sign
+  name: Ľutina
+  type: city
 2023-Lutina-LutinaMiniskanzen:
-  description: null
+  description: Skanzen s miniatúrami drevených cerkví
   elevation: '447.4104'
   lat: '49.167184'
   lon: '21.0451'
   name: Ľutina miniskanzen
-  type: sign
+  type: poi
 2023-Lutina-Mincol:
-  description: null
+  description: Vrch Minčol
   elevation: '1149.111694'
   lat: '49.234546'
   lon: '20.988971'
   name: Minčol
-  type: sign
+  type: peak
 2023-Lutina-MincolVyhliadka:
-  description: null
+  description: Výhliadka s krížom
   elevation: '1124.395142'
   lat: '49.230489'
   lon: '20.994231'
   name: Minčol vyhliadka
-  type: sign
+  type: view
 2023-Lutina-SedloZdiare:
   description: null
   elevation: '966.431519'
@@ -103,6 +105,62 @@
   lon: '21.031442'
   name: Za hradom
   type: sign
+2023-Oscadnica-Cadca:
+  description: null
+  elevation: '415.693787'
+  lat: '49.443483'
+  lon: '18.787086'
+  name: Čadca
+  type: city
+2023-Oscadnica-Javorske:
+  description: Vrch Javorské s malou útulňou
+  elevation: '860.823486'
+  lat: '49.452523'
+  lon: '18.863465'
+  name: Javorské
+  type: peak
+2023-Oscadnica-Oscadnica:
+  description: null
+  elevation: '459.699768'
+  lat: '49.433834'
+  lon: '18.880266'
+  name: Oščadnica
+  type: city
+2023-Trnava-Dechtice:
+  description: null
+  elevation: '184.949493'
+  lat: '48.547555'
+  lon: '17.59598'
+  name: Dechtice
+  type: city
+2023-Trnava-Planinka:
+  description: null
+  elevation: '264.986786'
+  lat: '48.567367'
+  lon: '17.549428'
+  name: Planinka
+  type: castle
+2023-Trnava-StaraLesnaZeleznica:
+  description: Pozostatky lesnej železničky prerobené na malú turistickú trať
+  elevation: '347.65094'
+  lat: '48.554744'
+  lon: '17.538941'
+  name: Stará lesná železnica
+  type: tech
+2023-Trnava-Trnava:
+  description: Historické mesto s veľa cirkevnými budovami
+  elevation: '145.71312'
+  lat: '48.377597'
+  lon: '17.585906'
+  name: Trnava
+  type: city
+2023-Trnava-ZrucaninaKlastoraSvKatarinyAlexandrijskej:
+  description: Zrúcanina kostola a kláštora
+  elevation: '334.3013'
+  lat: '48.555206'
+  lon: '17.535609'
+  name: Zrúcanina kláštora sv Kataríny Alexandrijskej
+  type: castle
 Sivec:
   description: null
   elevation: '763.169739'

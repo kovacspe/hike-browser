@@ -1,0 +1,27 @@
+date: '2023-04-16'
+name: Oščadnica - Čadca
+places:
+  - description: null
+    name: Oščadnica
+    ref: 2023-Oscadnica-Oscadnica
+    rest_time: 0:00
+  - description: Vrchol Javorské s malou útulňou
+    name: Javorské
+    ref: 2023-Oscadnica-Javorske
+    rest_time: 0:15
+  - description: null
+    name: Čadca
+    ref: 2023-Oscadnica-Cadca
+    rest_time: 0:00
+segments:
+  - name: Oščadnica - Javorské
+    time: 2:00
+    travel_by: foot
+  - name: Javorské - Čadca
+    time: 2:00
+    travel_by: foot
+start_at: 10:00
+tags:
+  - Slovensko
+  - Kysuce
+with_who: []

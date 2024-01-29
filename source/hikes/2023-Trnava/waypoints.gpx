@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="48.567367" lon="17.549428">
+		<ele>264.986786</ele>
+		<name>Planinka</name>
+	</wpt>
+	<wpt lat="48.554744" lon="17.538941">
+		<ele>347.650940</ele>
+		<name>Stará lesná železnica</name>
+	</wpt>
+	<wpt lat="48.555206" lon="17.535609">
+		<ele>334.301300</ele>
+		<name>Zrúcanina kláštora sv Kataríny Alexandrijskej</name>
+	</wpt>
+	<wpt lat="48.547555" lon="17.595980">
+		<ele>184.949493</ele>
+		<name>Dechtice</name>
+	</wpt>
+	<wpt lat="48.377597" lon="17.585906">
+		<ele>145.713120</ele>
+		<name>Trnava</name>
+	</wpt>
+</gpx>
+

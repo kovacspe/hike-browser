@@ -14,6 +14,8 @@ if __name__ == '__main__':
         'generate': storage.create_from_gpx,
         'build': builder.build_hike_page,
         'build-all': builder.build_pages,
-        'build-index': builder.build_index
+        'build-index': builder.build_index,
+        'merge-points': storage.merge_points,
+        'add-points': storage.add_point_from_file
     })
     storage.save()
