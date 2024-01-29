@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="48.239823" lon="17.044368">
+		<ele>185.809326</ele>
+		<name>Záhorská bystrica</name>
+	</wpt>
+	<wpt lat="48.247436" lon="17.067454">
+		<ele>227.705475</ele>
+		<name>Mariánka - pútnicke miesto</name>
+	</wpt>
+	<wpt lat="48.252639" lon="17.112038">
+		<ele>274.447235</ele>
+		<name>Pod dračím hrádkom</name>
+	</wpt>
+	<wpt lat="48.254582" lon="17.111447">
+		<ele>376.708466</ele>
+		<name>Dračí hrádok</name>
+	</wpt>
+	<wpt lat="48.275264" lon="17.082560">
+		<ele>468.186066</ele>
+		<name>Hrad Pajštún</name>
+	</wpt>
+	<wpt lat="48.275935" lon="17.038550">
+		<ele>186.060104</ele>
+		<name>Stupavský park</name>
+	</wpt>
+	<wpt lat="48.273279" lon="17.032639">
+		<ele>182.176422</ele>
+		<name>Stupava</name>
+	</wpt>
+</gpx>
+

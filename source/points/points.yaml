@@ -34,7 +34,8 @@
   name: Sokolia skala
   type: view
 2023-LipanyMincolSpiaciMnich:
-  description: Sklaný objekt vyzerujúci ako spiaci obor. Pekný výhľad a prechodná
+  description:
+    Sklaný objekt vyzerujúci ako spiaci obor. Pekný výhľad a prechodná
     jaskyňa zo spodu objektu navrch.
   elevation: '672.856567'
   lat: '49.209835'
@@ -42,7 +43,8 @@
   name: Spiaci mních
   type: poi
 2023-LipanyMincolUtulnaPodMincolom:
-  description: Veľká útulňa s pieckou. Je zamknutá a kľuče má miestna turistická organizácia.
+  description:
+    Veľká útulňa s pieckou. Je zamknutá a kľuče má miestna turistická organizácia.
     Požičiava chatu za malý poplatok.
   elevation: '991.97345'
   lat: '49.22753'
@@ -125,6 +127,55 @@
   lat: '49.433834'
   lon: '18.880266'
   name: Oščadnica
+  type: city
+2023-Pajstun-DraciHradok:
+  description: Ruiny hradu
+  elevation: '376.708466'
+  lat: '48.254582'
+  lon: '17.111447'
+  name: Dračí hrádok
+  type: castle
+2023-Pajstun-HradPajstun:
+  description: Zrúcanina hradu Pajštún
+  elevation: '468.186066'
+  lat: '48.275264'
+  lon: '17.08256'
+  name: Hrad Pajštún
+  type: castle
+2023-Pajstun-Marianka-PutnickeMiesto:
+  description: Pútnicke miesto - Kostol, kaplnky
+  elevation: '227.705475'
+  lat: '48.247436'
+  lon: '17.067454'
+  name: Mariánka - pútnicke miesto
+  type: poi
+2023-Pajstun-PodDracimHradkom:
+  description: null
+  elevation: '274.447235'
+  lat: '48.252639'
+  lon: '17.112038'
+  name: Pod dračím hrádkom
+  type: sign
+2023-Pajstun-Stupava:
+  description: null
+  elevation: '182.176422'
+  lat: '48.273279'
+  lon: '17.032639'
+  name: Stupava
+  type: city
+2023-Pajstun-StupavskyPark:
+  description: Stupavský park s kaštieľom
+  elevation: '186.060104'
+  lat: '48.275935'
+  lon: '17.03855'
+  name: Stupavský park
+  type: poi
+2023-Pajstun-ZahorskaBystrica:
+  description: null
+  elevation: '185.809326'
+  lat: '48.239823'
+  lon: '17.044368'
+  name: Záhorská bystrica
   type: city
 2023-Trnava-Dechtice:
   description: null

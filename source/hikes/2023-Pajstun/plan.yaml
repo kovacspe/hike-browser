@@ -1,0 +1,55 @@
+date: '2024-01-29'
+name: Name
+places:
+  - description: null
+    name: Záhorská bystrica
+    ref: 2023-Pajstun-ZahorskaBystrica
+    rest_time: 0:00
+  - description: null
+    name: Mariánka - pútnicke miesto
+    ref: 2023-Pajstun-Marianka-PutnickeMiesto
+    rest_time: 0:10
+  - description: null
+    name: Pod dračím hrádkom
+    ref: 2023-Pajstun-PodDracimHradkom
+    rest_time: 0:05
+  - description: null
+    name: Dračí hrádok
+    ref: 2023-Pajstun-DraciHradok
+    rest_time: 0:10
+  - description: null
+    name: Hrad Pajštún
+    ref: 2023-Pajstun-HradPajstun
+    rest_time: 0:20
+  - description: null
+    name: Stupavský park
+    ref: 2023-Pajstun-StupavskyPark
+    rest_time: 0:10
+  - description: null
+    name: Stupava
+    ref: 2023-Pajstun-Stupava
+    rest_time: 0:00
+segments:
+  - name: Záhorská bystrica - Mariánka - pútnicke miesto
+    time: 0:40
+    travel_by: foot
+  - name: Mariánka - pútnicke miesto - Pod dračím hrádkom
+    time: 1:45
+    travel_by: foot
+  - name: Pod dračím hrádkom - Dračí hrádok
+    time: 0:30
+    travel_by: foot
+  - name: Dračí hrádok - Hrad Pajštún
+    time: 1:20
+    travel_by: foot
+  - name: Hrad Pajštún - Stupavský park
+    time: 1:00
+    travel_by: foot
+  - name: Stupavský park - Stupava
+    time: 0:10
+    travel_by: foot
+start_at: 9:00
+tags:
+  - Slovensko
+  - Karpaty
+with_who: []
