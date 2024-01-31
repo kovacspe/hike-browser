@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="48.805849" lon="22.004521">
+		<ele>114.704041</ele>
+		<name>Kamenec - pláž</name>
+	</wpt>
+	<wpt lat="48.808840" lon="22.010980">
+		<ele>115.507607</ele>
+		<name>Kamenec</name>
+	</wpt>
+	<wpt lat="48.816604" lon="21.985322">
+		<ele>203.314514</ele>
+		<name>Vinianske jazero</name>
+	</wpt>
+	<wpt lat="48.800023" lon="21.983836">
+		<ele>231.144699</ele>
+		<name>Kostolík pod Senderovom</name>
+	</wpt>
+	<wpt lat="48.793606" lon="21.974110">
+		<ele>113.518486</ele>
+		<name>Šírava  - pláž hôrka</name>
+	</wpt>
+</gpx>
+

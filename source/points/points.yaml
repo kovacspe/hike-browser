@@ -34,8 +34,7 @@
   name: Sokolia skala
   type: view
 2023-LipanyMincolSpiaciMnich:
-  description:
-    Sklaný objekt vyzerujúci ako spiaci obor. Pekný výhľad a prechodná
+  description: Sklaný objekt vyzerujúci ako spiaci obor. Pekný výhľad a prechodná
     jaskyňa zo spodu objektu navrch.
   elevation: '672.856567'
   lat: '49.209835'
@@ -43,8 +42,7 @@
   name: Spiaci mních
   type: poi
 2023-LipanyMincolUtulnaPodMincolom:
-  description:
-    Veľká útulňa s pieckou. Je zamknutá a kľuče má miestna turistická organizácia.
+  description: Veľká útulňa s pieckou. Je zamknutá a kľuče má miestna turistická organizácia.
     Požičiava chatu za malý poplatok.
   elevation: '991.97345'
   lat: '49.22753'
@@ -212,6 +210,41 @@
   lon: '17.535609'
   name: Zrúcanina kláštora sv Kataríny Alexandrijskej
   type: castle
+2023-VinianskeJazero-Kamenec:
+  description: null
+  elevation: '115.507607'
+  lat: '48.80884'
+  lon: '22.01098'
+  name: Kamenec
+  type: sign
+2023-VinianskeJazero-Kamenec-Plaz:
+  description: Pláž pri moteli Kamenec so stánkami
+  elevation: '114.704041'
+  lat: '48.805849'
+  lon: '22.004521'
+  name: Kamenec - pláž
+  type: poi
+2023-VinianskeJazero-KostolikPodSenderovom:
+  description: Zrúcanina kostola s výhľadom na Zemplínsku šíravu
+  elevation: '231.144699'
+  lat: '48.800023'
+  lon: '21.983836'
+  name: Kostolík pod Senderovom
+  type: poi
+2023-VinianskeJazero-Sirava-PlazHorka:
+  description: Udržiavaná pláž s barom
+  elevation: '113.518486'
+  lat: '48.793606'
+  lon: '21.97411'
+  name: Šírava  - pláž hôrka
+  type: poi
+2023-VinianskeJazero-VinianskeJazero:
+  description: Malé jazero vynikajúce na kúpanie
+  elevation: '203.314514'
+  lat: '48.816604'
+  lon: '21.985322'
+  name: Vinianske jazero
+  type: poi
 Sivec:
   description: null
   elevation: '763.169739'
