@@ -1,3 +1,52 @@
+2018-BystraLavka-BystraLavka:
+  description: null
+  elevation: '2303.712646'
+  lat: '49.166895'
+  lon: '20.029153'
+  name: Bystrá lávka
+  type: peak
+2018-BystraLavka-CapiePleso:
+  description: null
+  elevation: '2080.739014'
+  lat: '49.167168'
+  lon: '20.037071'
+  name: Capie pleso
+  type: poi
+2018-BystraLavka-RazcestieNadFurkotskouDolinou:
+  description: null
+  elevation: '1453.065063'
+  lat: '49.132561'
+  lon: '20.037039'
+  name: Rázcestie nad Furkotskou dolinou
+  type: sign
+2018-BystraLavka-StrbskePleso:
+  description: null
+  elevation: '1380.144897'
+  lat: '49.129672'
+  lon: '20.060202'
+  name: Štrbské pleso
+  type: city
+2018-BystraLavka-StrbskePleso-Stanica:
+  description: null
+  elevation: '1324.274414'
+  lat: '49.118214'
+  lon: '20.062552'
+  name: Štrbské pleso - stanica
+  type: sign
+2018-BystraLavka-VodopadSkok:
+  description: null
+  elevation: '1723.349731'
+  lat: '49.152585'
+  lon: '20.045075'
+  name: Vodopád Skok
+  type: poi
+2018-BystraLavka-VysneWahlenbergovoPleso:
+  description: null
+  elevation: '2168.827148'
+  lat: '49.163857'
+  lon: '20.028048'
+  name: Vyšné Wahlenbergovo pleso
+  type: poi
 2021-MartinskeHole-FerrataMartinskeHole:
   description: Ferrata cez dolinu - pomerne obtiažna, kvůli množstvu vody
   elevation: '932.522766'

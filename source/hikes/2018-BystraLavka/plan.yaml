@@ -1,0 +1,62 @@
+date: '2024-02-02'
+name: Name
+places:
+  - description: null
+    name: Štrbské pleso - stanica
+    ref: 2018-BystraLavka-StrbskePleso-Stanica
+    rest_time: 0:10
+  - description: null
+    name: Štrbské pleso
+    ref: 2018-BystraLavka-StrbskePleso
+    rest_time: 0:15
+  - description: null
+    name: Vodopád Skok
+    ref: 2018-BystraLavka-VodopadSkok
+    rest_time: 0:15
+  - description: null
+    name: Capie pleso
+    ref: 2018-BystraLavka-CapiePleso
+    rest_time: 0:15
+  - description: null
+    name: Bystrá lávka
+    ref: 2018-BystraLavka-BystraLavka
+    rest_time: 0:15
+  - description: null
+    name: Vyšné Wahlenbergovo pleso
+    ref: 2018-BystraLavka-VysneWahlenbergovoPleso
+    rest_time: 0:15
+  - description: null
+    name: Rázcestie nad Furkotskou dolinou
+    ref: 2018-BystraLavka-RazcestieNadFurkotskouDolinou
+    rest_time: 0:05
+  - description: null
+    name: Štrbské pleso - stanica
+    ref: 2018-BystraLavka-StrbskePleso-Stanica
+    rest_time: 0:00
+segments:
+  - name: Štrbské pleso - stanica - Štrbské pleso
+    time: 0:30
+    travel_by: foot
+  - name: Štrbské pleso - Vodopád Skok
+    time: 1:30
+    travel_by: foot
+  - name: Vodopád Skok - Capie pleso
+    time: 0:55
+    travel_by: foot
+  - name: Capie pleso - Bystrá lávka
+    time: 0:25
+    travel_by: foot
+  - name: Bystrá lávka - Vyšné Wahlenbergovo pleso
+    time: 0:20
+    travel_by: foot
+  - name: Vyšné Wahlenbergovo pleso - Rázcestie nad Furkotskou dolinou
+    time: 1:45
+    travel_by: foot
+  - name: Rázcestie nad Furkotskou dolinou - Štrbské pleso - stanica
+    time: 1:10
+    travel_by: foot
+start_at: 8:30
+tags:
+  - Slovensko
+  - Tatry
+with_who: []
