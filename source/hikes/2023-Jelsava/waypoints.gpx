@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="48.553138" lon="20.413384">
+		<ele>217.706223</ele>
+		<name>Plešivec - stanica</name>
+	</wpt>
+	<wpt lat="48.622048" lon="20.418855">
+		<ele>679.640259</ele>
+		<name>Serényiho cisterna</name>
+	</wpt>
+	<wpt lat="48.657645" lon="20.423115">
+		<ele>750.887390</ele>
+		<name>Gerlašská skala</name>
+	</wpt>
+	<wpt lat="48.659650" lon="20.363913">
+		<ele>281.500610</ele>
+		<name>Štítnik</name>
+	</wpt>
+	<wpt lat="48.658017" lon="20.364535">
+		<ele>285.619049</ele>
+		<name>Štítnik kostol</name>
+	</wpt>
+	<wpt lat="48.664561" lon="20.309528">
+		<ele>659.769958</ele>
+		<name>Ochtinská aragonitová jaskyňa</name>
+	</wpt>
+	<wpt lat="48.630147" lon="20.235306">
+		<ele>256.907013</ele>
+		<name>Jelšava</name>
+	</wpt>
+	<wpt lat="48.631604" lon="20.235521">
+		<ele>263.499359</ele>
+		<name>Coburgovský kaštieľ</name>
+	</wpt>
+</gpx>
+

@@ -1,0 +1,70 @@
+date: '2020-09-23'
+name: Pálava
+places:
+  - description: null
+    name: Archeopark Pavlov
+    ref: 2022-Palava-ArcheoparkPavlov
+    rest_time: 1:00
+  - description: null
+    name: Pavlov
+    ref: 2022-Palava-Pavlov
+    rest_time: 1:00
+  - description: null
+    name: hrad Děvčičky
+    ref: 2022-Palava-HradDevcicky
+    rest_time: 0:30
+  - description: null
+    name: Děvín - výhľad
+    ref: 2022-Palava-Devin-Vyhlad
+    rest_time: 0:05
+  - description: null
+    name: Děvín - vysielač
+    ref: 2022-Palava-DevinVysielac
+    rest_time: 0:05
+  - description: null
+    name: Sirotčí hrádek
+    ref: 2022-Palava-SirotciHradek
+    rest_time: 0:10
+  - description: null
+    name: Tabulová hora
+    ref: 2022-Palava-TabulovaHora
+    rest_time: 0:05
+  - description: null
+    name: Bavory
+    ref: 2022-Palava-Bavory
+    rest_time: 0:45
+  - description: null
+    name: Bavory autobus
+    ref: 2022-Palava-BavoryAutobus
+    rest_time: 0:00
+segments:
+  - name: Archeopark Pavlov - Pavlov
+    time: 0:15
+    travel_by: foot
+  - name: Pavlov - hrad Děvčičky
+    time: 0:50
+    travel_by: foot
+  - name: hrad Děvčičky - Děvín - výhľad
+    time: 0:35
+    travel_by: foot
+  - name: Děvín - výhľad - Děvín - vysielač
+    time: 0:05
+    travel_by: foot
+  - name: Děvín - vysielač - Sirotčí hrádek
+    time: 1:15
+    travel_by: foot
+  - name: Sirotčí hrádek - Tabulová hora
+    time: 0:20
+    travel_by: foot
+  - name: Tabulová hora - Bavory
+    time: 0:30
+    travel_by: foot
+  - name: Bavory - Bavory autobus
+    time: 0:15
+    travel_by: foot
+start_at: 9:00
+tags:
+  - Česko
+  - Víno
+  - Morava
+with_who: []

@@ -1,0 +1,63 @@
+date: '2024-08-05'
+name: Plešivec - Štítnik - Jelšava
+places:
+  - description: null
+    name: Plešivec - stanica
+    ref: 2023-Jelsava-Plesivec-Stanica
+    rest_time: 0:00
+  - description: null
+    name: Serényiho cisterna
+    ref: 2023-Jelsava-SerenyihoCisterna
+    rest_time: 0:10
+  - description: null
+    name: Gerlašská skala
+    ref: 2023-Jelsava-GerlasskaSkala
+    rest_time: 0:15
+  - description: null
+    name: Štítnik
+    ref: 2023-Jelsava-Stitnik
+    rest_time: 0:45
+  - description: null
+    name: Štítnik kostol
+    ref: 2023-Jelsava-StitnikKostol
+    rest_time: 0:15
+  - description: null
+    name: Ochtinská aragonitová jaskyňa
+    ref: 2023-Jelsava-OchtinskaAragonitovaJaskyna
+    rest_time: 1:30
+  - description: null
+    name: Jelšava
+    ref: 2023-Jelsava-Jelsava
+    rest_time: 0:00
+  - description: null
+    name: Coburgovský kaštieľ
+    ref: 2023-Jelsava-CoburgovskyKastiel
+    rest_time: 0:00
+segments:
+  - name: Plešivec - stanica - Serényiho cisterna
+    time: 3:00
+    travel_by: foot
+  - name: Serényiho cisterna - Gerlašská skala
+    time: 1:30
+    travel_by: foot
+  - name: Gerlašská skala - Štítnik
+    time: 1:45
+    travel_by: foot
+  - name: Štítnik - Štítnik kostol
+    time: 0:05
+    travel_by: foot
+  - name: Štítnik kostol - Ochtinská aragonitová jaskyňa
+    time: 0:15
+    travel_by: pt
+  - name: Ochtinská aragonitová jaskyňa - Jelšava
+    time: 0:00
+    travel_by: foot
+  - name: Jelšava - Coburgovský kaštieľ
+    time: 1:30
+    travel_by: foot
+start_at: 8:00
+tags:
+  - Slovensko
+  - Gemer
+  - Jaskyňa
+with_who: []

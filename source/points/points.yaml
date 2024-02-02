@@ -1,3 +1,157 @@
+2021-MartinskeHole-FerrataMartinskeHole:
+  description: Ferrata cez dolinu - pomerne obtiažna, kvůli množstvu vody
+  elevation: '932.522766'
+  lat: '49.08685'
+  lon: '18.838374'
+  name: Ferrata Martinské hole
+  type: poi
+2021-MartinskeHole-Lom:
+  description: Bývalý lom
+  elevation: '640.327332'
+  lat: '49.079339'
+  lon: '18.854779'
+  name: Lom
+  type: poi
+2021-MartinskeHole-MartinStrane:
+  description: null
+  elevation: '505.281372'
+  lat: '49.08085'
+  lon: '18.871752'
+  name: Martin, Stráne
+  type: sign
+2021-MartinskeHole-MartinskeHole-Chata:
+  description: null
+  elevation: '1261.525879'
+  lat: '49.09427'
+  lon: '18.833675'
+  name: Martinské hole - chata
+  type: view
+2021-MartinskeHole-PartizanskyKanon:
+  description: Kanón z SNP
+  elevation: '855.612488'
+  lat: '49.089254'
+  lon: '18.85951'
+  name: Partizánsky kanón
+  type: poi
+2022-Palava-ArcheoparkPavlov:
+  description: Archeologický park Pavlov - nálezisko z praveku
+  elevation: '188.453918'
+  lat: '48.877472'
+  lon: '16.67558'
+  name: Archeopark Pavlov
+  type: poi
+2022-Palava-Bavory:
+  description: null
+  elevation: '241.902939'
+  lat: '48.836608'
+  lon: '16.625552'
+  name: Bavory
+  type: city
+2022-Palava-BavoryAutobus:
+  description: null
+  elevation: '218.920425'
+  lat: '48.82987'
+  lon: '16.613235'
+  name: Bavory autobus
+  type: sign
+2022-Palava-Devin-Vyhlad:
+  description: null
+  elevation: '519.0'
+  lat: '48.867804'
+  lon: '16.651044'
+  name: Děvín - výhľad
+  type: view
+2022-Palava-DevinVysielac:
+  description: null
+  elevation: '449.882721'
+  lat: '48.869465'
+  lon: '16.6502756'
+  name: Děvín, vysielač
+  type: view
+2022-Palava-HradDevcicky:
+  description: null
+  elevation: '426.953308'
+  lat: '48.876117'
+  lon: '16.662019'
+  name: hrad Děvčičky
+  type: castle
+2022-Palava-Pavlov:
+  description: null
+  elevation: '228.0'
+  lat: '48.874212'
+  lon: '16.673327'
+  name: Pavlov
+  type: city
+2022-Palava-SirotciHradek:
+  description: Zrúcanina hradu
+  elevation: '417.098114'
+  lat: '48.845526'
+  lon: '16.640207'
+  name: Sirotčí hrádek
+  type: castle
+2022-Palava-TabulovaHora:
+  description: null
+  elevation: '449.882721'
+  lat: '48.839256'
+  lon: '16.637579'
+  name: Tabulová hora
+  type: view
+2023-Jelsava-CoburgovskyKastiel:
+  description: Kaštieľ v ktorom je možné prespať.
+  elevation: '256.907013'
+  lat: '48.6316036'
+  lon: '20.2355211'
+  name: Coburgovský kaštieľ
+  type: castle
+2023-Jelsava-GerlasskaSkala:
+  description: Výhliadka z Plešiveckej planiny
+  elevation: '750.88739'
+  lat: '48.657645'
+  lon: '20.423115'
+  name: Gerlašská skala
+  type: view
+2023-Jelsava-Jelsava:
+  description: null
+  elevation: '256.907013'
+  lat: '48.630147'
+  lon: '20.235306'
+  name: Jelšava
+  type: city
+2023-Jelsava-OchtinskaAragonitovaJaskyna:
+  description: Aragonitová jaskyňa
+  elevation: '659.769958'
+  lat: '48.664561'
+  lon: '20.309528'
+  name: Ochtinská aragonitová jaskyňa
+  type: cave
+2023-Jelsava-Plesivec-Stanica:
+  description: null
+  elevation: '217.706223'
+  lat: '48.553138'
+  lon: '20.413384'
+  name: Plešivec - stanica
+  type: sign
+2023-Jelsava-SerenyihoCisterna:
+  description: Stará betónová cisterna na Plešiveckej planine pre napájanie dobytka
+  elevation: '679.640259'
+  lat: '48.622048'
+  lon: '20.418855'
+  name: Serényiho cisterna
+  type: poi
+2023-Jelsava-Stitnik:
+  description: null
+  elevation: '281.50061'
+  lat: '48.65965'
+  lon: '20.363913'
+  name: Štítnik
+  type: city
+2023-Jelsava-StitnikKostol:
+  description: Veľký pekný historický kostol
+  elevation: '281.50061'
+  lat: '48.6580167'
+  lon: '20.3645353'
+  name: Štítnik, kostol
+  type: poi
 2023-LipanyMincolKamenickyHrad:
   description: Zrúcanina Kamenického hradu s nádherným výhľadom
   elevation: '693.811279'

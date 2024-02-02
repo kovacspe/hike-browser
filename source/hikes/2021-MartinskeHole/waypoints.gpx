@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="49.080850" lon="18.871752">
+		<ele>505.281372</ele>
+		<name>Nový bod</name>
+	</wpt>
+	<wpt lat="49.079339" lon="18.854779">
+		<ele>640.327332</ele>
+		<name>Lom</name>
+	</wpt>
+	<wpt lat="49.086850" lon="18.838374">
+		<ele>932.522766</ele>
+		<name>Ferrata Martinské hole</name>
+	</wpt>
+	<wpt lat="49.094270" lon="18.833675">
+		<ele>1261.525879</ele>
+		<name>Martinské hole - chata</name>
+	</wpt>
+	<wpt lat="49.089254" lon="18.859510">
+		<ele>855.612488</ele>
+		<name>Partizánsky kanón</name>
+	</wpt>
+	<wpt lat="49.080903" lon="18.871661">
+		<ele>505.935699</ele>
+		<name>Martin - stráne</name>
+	</wpt>
+</gpx>
+
