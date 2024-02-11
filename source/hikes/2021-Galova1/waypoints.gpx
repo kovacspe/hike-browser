@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="48.842007" lon="20.433872">
+		<ele>731.829163</ele>
+		<name>Rakovec</name>
+	</wpt>
+	<wpt lat="48.815538" lon="20.449804">
+		<ele>1135.128052</ele>
+		<name>Lesná sprcha pod Galovou</name>
+	</wpt>
+	<wpt lat="48.815226" lon="20.443570">
+		<ele>1123.286987</ele>
+		<name>Útulňa Galová</name>
+	</wpt>
+</gpx>
+

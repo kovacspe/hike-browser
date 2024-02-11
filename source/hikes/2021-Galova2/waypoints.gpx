@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="48.815226" lon="20.443570">
+		<ele>1123.286987</ele>
+		<name>Útulňa Galová</name>
+	</wpt>
+	<wpt lat="48.773943" lon="20.410822">
+		<ele>403.030945</ele>
+		<name>Vlachovo</name>
+	</wpt>
+</gpx>
+

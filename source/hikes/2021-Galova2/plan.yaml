@@ -1,0 +1,20 @@
+date: '2021-08-05'
+name: Galová - Vlachovo
+places:
+  - description: null
+    name: Útulňa Galová
+    ref: 2021-Galova1-UtulnaGalova
+    rest_time: 0:00
+  - description: null
+    name: Vlachovo
+    ref: 2021-Galova2-Vlachovo
+    rest_time: 0:00
+segments:
+  - name: Útulňa Galová - Vlachovo
+    time: 1:45
+    travel_by: foot
+start_at: 9:00
+tags:
+  - Slovensko
+  - Volovské vrchy
+with_who: []

@@ -363,7 +363,6 @@ class DataStorage(BaseModel):
             print(
                 f'Looks like {slug} is similar to {possible_match}, to merge use:')
             print(f'python manage.py merge-points {possible_match} {slug}')
-            return slug
         self.points[slug] = point
         return slug
 

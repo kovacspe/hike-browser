@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="49.118600" lon="20.062587">
+		<ele>1324.451294</ele>
+		<name>Strbske pleso - stanica</name>
+	</wpt>
+	<wpt lat="49.134334" lon="20.012977">
+		<ele>1452.407715</ele>
+		<name>Jamské pleso</name>
+	</wpt>
+	<wpt lat="49.159297" lon="20.001347">
+		<ele>2325.997314</ele>
+		<name>Malý Kriváň</name>
+	</wpt>
+	<wpt lat="49.162566" lon="20.000188">
+		<ele>2477.741943</ele>
+		<name>Kriváň</name>
+	</wpt>
+	<wpt lat="49.118586" lon="20.062651">
+		<ele>1323.867798</ele>
+		<name>Strbske pleso -stanica2</name>
+	</wpt>
+</gpx>
+

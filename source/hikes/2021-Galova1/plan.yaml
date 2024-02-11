@@ -1,0 +1,27 @@
+date: '2021-08-04'
+name: Rakovník - Útulňa Galová
+places:
+  - description: null
+    name: Rakovec
+    ref: 2021-Galova1-Rakovec
+    rest_time: 0:00
+  - description: null
+    name: Lesná sprcha pod Galovou
+    ref: 2021-Galova1-LesnaSprchaPodGalovou
+    rest_time: 0:15
+  - description: null
+    name: Útulňa Galová
+    ref: 2021-Galova1-UtulnaGalova
+    rest_time: 0:00
+segments:
+  - name: Rakovec - Lesná sprcha pod Galovou
+    time: 3:20
+    travel_by: foot
+  - name: Lesná sprcha pod Galovou - Útulňa Galová
+    time: 0:10
+    travel_by: foot
+start_at: 16:00
+tags:
+  - Slovensko
+  - Volovské vrchy
+with_who: []

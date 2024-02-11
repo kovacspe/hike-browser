@@ -1,3 +1,24 @@
+2017-Krivan-JamskePleso:
+  description: null
+  elevation: '1452.407715'
+  lat: '49.134334'
+  lon: '20.012977'
+  name: Jamské pleso
+  type: sign
+2017-Krivan-Krivan:
+  description: null
+  elevation: '2477.741943'
+  lat: '49.162566'
+  lon: '20.000188'
+  name: Kriváň
+  type: peak
+2017-Krivan-MalyKrivan:
+  description: null
+  elevation: '2325.997314'
+  lat: '49.159297'
+  lon: '20.001347'
+  name: Malý Kriváň
+  type: peak
 2018-BystraLavka-BystraLavka:
   description: null
   elevation: '2303.712646'
@@ -47,6 +68,34 @@
   lon: '20.028048'
   name: Vyšné Wahlenbergovo pleso
   type: poi
+2021-Galova1-LesnaSprchaPodGalovou:
+  description: Lesná sprcha pri prameni pod Galovou.
+  elevation: '1135.128052'
+  lat: '48.815538'
+  lon: '20.449804'
+  name: Lesná sprcha pod Galovou
+  type: poi
+2021-Galova1-Rakovec:
+  description: null
+  elevation: '731.829163'
+  lat: '48.842007'
+  lon: '20.433872'
+  name: Rakovec
+  type: city
+2021-Galova1-UtulnaGalova:
+  description: null
+  elevation: '1123.286987'
+  lat: '48.815226'
+  lon: '20.44357'
+  name: Útulňa Galová
+  type: sleep
+2021-Galova2-Vlachovo:
+  description: null
+  elevation: '403.030945'
+  lat: '48.773943'
+  lon: '20.410822'
+  name: Vlachovo
+  type: city
 2021-MartinskeHole-FerrataMartinskeHole:
   description: Ferrata cez dolinu - pomerne obtiažna, kvůli množstvu vody
   elevation: '932.522766'
