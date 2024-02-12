@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="48.926377" lon="20.748904">
+		<ele>402.014618</ele>
+		<name>Olcnava</name>
+	</wpt>
+	<wpt lat="48.907035" lon="20.723538">
+		<ele>547.850525</ele>
+		<name>Vodopád Sikľavá skala</name>
+	</wpt>
+	<wpt lat="48.894392" lon="20.731770">
+		<ele>697.397034</ele>
+		<name>Šarkanova diera</name>
+	</wpt>
+	<wpt lat="48.889108" lon="20.725646">
+		<ele>872.335571</ele>
+		<name>Vysoký vrch</name>
+	</wpt>
+	<wpt lat="48.884009" lon="20.723790">
+		<ele>769.735046</ele>
+		<name>Poráč</name>
+	</wpt>
+	<wpt lat="48.878319" lon="20.740989">
+		<ele>604.445679</ele>
+		<name>Poráčska dolina - banské múzeum</name>
+	</wpt>
+	<wpt lat="48.882997" lon="20.809943">
+		<ele>475.942200</ele>
+		<name>Ploštiny</name>
+	</wpt>
+	<wpt lat="48.879755" lon="20.844252">
+		<ele>441.100983</ele>
+		<name>Slovinky</name>
+	</wpt>
+</gpx>
+

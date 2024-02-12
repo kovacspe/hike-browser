@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="50.038121" lon="13.869000">
+		<ele>254.679718</ele>
+		<name>Křivoklát</name>
+	</wpt>
+	<wpt lat="50.037582" lon="13.873556">
+		<ele>287.891632</ele>
+		<name>hrad Křivoklát</name>
+	</wpt>
+	<wpt lat="50.031392" lon="13.868991">
+		<ele>270.313843</ele>
+		<name>Vyhlídka Paraplíčko</name>
+	</wpt>
+	<wpt lat="50.026574" lon="13.867566">
+		<ele>279.228821</ele>
+		<name>Roztoky</name>
+	</wpt>
+	<wpt lat="49.996447" lon="13.893369">
+		<ele>467.000000</ele>
+		<name>Zámek Leontýn</name>
+	</wpt>
+	<wpt lat="49.992271" lon="13.901416">
+		<ele>424.000000</ele>
+		<name>Staré duby</name>
+	</wpt>
+	<wpt lat="49.980844" lon="13.946810">
+		<ele>382.247009</ele>
+		<name>Bývala cáchovna</name>
+	</wpt>
+	<wpt lat="49.981358" lon="13.943623">
+		<ele>360.355133</ele>
+		<name>Nový Jáchymov</name>
+	</wpt>
+	<wpt lat="50.002447" lon="14.002825">
+		<ele>233.000000</ele>
+		<name>Nižbor</name>
+	</wpt>
+</gpx>
+

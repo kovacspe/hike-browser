@@ -1,0 +1,55 @@
+date: '2021-09-09'
+name: Labský kaňon
+places:
+  - description: null
+    name: Dečín
+    ref: 2021-LabskyKanon-Decin
+    rest_time: 0:00
+  - description: null
+    name: Stoličná hora
+    ref: 2021-LabskyKanon-StolicnaHora
+    rest_time: 0:15
+  - description: null
+    name: Sněžnická vyhlídka
+    ref: 2021-LabskyKanon-SneznickaVyhlidka
+    rest_time: 0:05
+  - description: null
+    name: Vyhlídka Labská stráž
+    ref: 2021-LabskyKanon-VyhlidkaLabskaStraz
+    rest_time: 0:05
+  - description: null
+    name: Ružová vyhlídka
+    ref: 2021-LabskyKanon-RuzovaVyhlidka
+    rest_time: 0:10
+  - description: null
+    name: vyhlídka Belveder
+    ref: 2021-LabskyKanon-VyhlidkaBelveder
+    rest_time: 0:30
+  - description: null
+    name: Labská stráň
+    ref: 2021-LabskyKanon-LabskaStran
+    rest_time: 0:00
+segments:
+  - name: Dečín - Stoličná hora
+    time: 1:00
+    travel_by: foot
+  - name: Stoličná hora - Sněžnická vyhlídka
+    time: 0:15
+    travel_by: foot
+  - name: Sněžnická vyhlídka - Vyhlídka Labská stráž
+    time: 0:05
+    travel_by: foot
+  - name: Vyhlídka Labská stráž - Ružová vyhlídka
+    time: 1:30
+    travel_by: foot
+  - name: Ružová vyhlídka - vyhlídka Belveder
+    time: 1:45
+    travel_by: foot
+  - name: vyhlídka Belveder - Labská stráň
+    time: 0:15
+    travel_by: foot
+start_at: 9:30
+tags:
+  - Česko
+  - České švýcarsko
+with_who: []

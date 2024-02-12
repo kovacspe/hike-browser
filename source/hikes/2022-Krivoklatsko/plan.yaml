@@ -1,0 +1,70 @@
+date: '2022-02-06'
+name: Křivoklátsko
+places:
+  - description: null
+    name: Křivoklát
+    ref: 2023-Krivoklatsko-Krivoklat
+    rest_time: 0:00
+  - description: null
+    name: hrad Křivoklát
+    ref: 2023-Krivoklatsko-HradKrivoklat
+    rest_time: 0:10
+  - description: null
+    name: Vyhlídka Paraplíčko
+    ref: 2023-Krivoklatsko-VyhlidkaParaplicko
+    rest_time: 0:05
+  - description: null
+    name: Roztoky
+    ref: 2023-Krivoklatsko-Roztoky
+    rest_time: 0:00
+  - description: null
+    name: Zámek Leontýn
+    ref: 2023-Krivoklatsko-ZamekLeontyn
+    rest_time: 0:05
+  - description: null
+    name: Staré duby
+    ref: 2023-Krivoklatsko-StareDuby
+    rest_time: 0:10
+  - description: null
+    name: Bývala cáchovna
+    ref: 2023-Krivoklatsko-ByvalaCachovna
+    rest_time: 0:30
+  - description: null
+    name: Nový Jáchymov
+    ref: 2023-Krivoklatsko-NovyJachymov
+    rest_time: 0:00
+  - description: null
+    name: Nižbor
+    ref: 2023-Krivoklatsko-Nizbor
+    rest_time: 0:00
+segments:
+  - name: Křivoklát - hrad Křivoklát
+    time: 0:15
+    travel_by: foot
+  - name: hrad Křivoklát - Vyhlídka Paraplíčko
+    time: 0:25
+    travel_by: foot
+  - name: Vyhlídka Paraplíčko - Roztoky
+    time: 0:25
+    travel_by: foot
+  - name: Roztoky - Zámek Leontýn
+    time: 1:40
+    travel_by: foot
+  - name: Zámek Leontýn - Staré duby
+    time: 0:20
+    travel_by: foot
+  - name: Staré duby - Bývala cáchovna
+    time: 1:10
+    travel_by: foot
+  - name: Bývala cáchovna - Nový Jáchymov
+    time: 0:02
+    travel_by: foot
+  - name: Nový Jáchymov - Nižbor
+    time: 1:40
+    travel_by: foot
+start_at: 9:00
+tags:
+  - Česko
+  - Křivoklátsko
+  - Hrady
+with_who: []

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="50.780476" lon="14.210342">
+		<ele>134.000000</ele>
+		<name>Dečín</name>
+	</wpt>
+	<wpt lat="50.785265" lon="14.227884">
+		<ele>281.624481</ele>
+		<name>Stoličná hora</name>
+	</wpt>
+	<wpt lat="50.787866" lon="14.233237">
+		<ele>283.773132</ele>
+		<name>Sněžnická vyhlídka</name>
+	</wpt>
+	<wpt lat="50.788927" lon="14.235372">
+		<ele>272.727600</ele>
+		<name>Vyhlídka Labská stráž</name>
+	</wpt>
+	<wpt lat="50.806244" lon="14.244352">
+		<ele>428.969147</ele>
+		<name>Ružová vyhlídka</name>
+	</wpt>
+	<wpt lat="50.849526" lon="14.221531">
+		<ele>273.744293</ele>
+		<name>vyhlídka Belveder</name>
+	</wpt>
+	<wpt lat="50.848891" lon="14.232324">
+		<ele>323.000000</ele>
+		<name>Labská stráň</name>
+	</wpt>
+</gpx>
+

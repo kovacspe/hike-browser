@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.cz/">
+	<wpt lat="48.729841" lon="20.739670">
+		<ele>553.547729</ele>
+		<name>Smolník</name>
+	</wpt>
+	<wpt lat="48.736871" lon="20.757266">
+		<ele>519.468506</ele>
+		<name>Židovský cintorín, Smolník</name>
+	</wpt>
+	<wpt lat="48.722242" lon="20.761911">
+		<ele>782.538452</ele>
+		<name>Štóske sedlo</name>
+	</wpt>
+	<wpt lat="48.722012" lon="20.791190">
+		<ele>622.345032</ele>
+		<name>Kúpele Štós</name>
+	</wpt>
+	<wpt lat="48.708271" lon="20.791190">
+		<ele>430.040375</ele>
+		<name>Štós</name>
+	</wpt>
+	<wpt lat="48.668980" lon="20.823334">
+		<ele>795.654419</ele>
+		<name>Hačava, sedlo</name>
+	</wpt>
+	<wpt lat="48.667570" lon="20.836466">
+		<ele>634.978699</ele>
+		<name>Hačava</name>
+	</wpt>
+	<wpt lat="48.640744" lon="20.848890">
+		<ele>369.302002</ele>
+		<name>Hájske vodopády</name>
+	</wpt>
+	<wpt lat="48.628435" lon="20.855155">
+		<ele>268.287628</ele>
+		<name>Háj</name>
+	</wpt>
+	<wpt lat="48.628683" lon="20.857237">
+		<ele>279.510315</ele>
+		<name>Socha Anjela, Háj</name>
+	</wpt>
+	<wpt lat="48.597721" lon="20.887063">
+		<ele>178.656296</ele>
+		<name>Turňa nad Bodvou</name>
+	</wpt>
+</gpx>
+

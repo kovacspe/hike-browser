@@ -47,6 +47,7 @@ class PlaceType(str, Enum):
     CASTLE = 'castle'
     CAVE = 'cave'
     PEAK = 'peak'
+    WATERFALL = 'waterfall'
 
     @property
     def icon(self):
@@ -60,7 +61,8 @@ class PlaceType(str, Enum):
             PlaceType.TECH: 'manufacturing',
             PlaceType.CASTLE: 'castle',
             PlaceType.CAVE: 'star',
-            PlaceType.PEAK: 'landscape'
+            PlaceType.PEAK: 'landscape',
+            PlaceType.WATERFALL: 'star'
         }[self]
 
     @classmethod

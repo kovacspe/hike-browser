@@ -1,3 +1,80 @@
+2014-Hacava-Hacava:
+  description: null
+  elevation: '634.978699'
+  lat: '48.66757'
+  lon: '20.836466'
+  name: Hačava
+  type: city
+2014-Hacava-Hacava,Sedlo:
+  description: V blízkosti sa nachádza aj malá jaskyňa
+  elevation: '795.654419'
+  lat: '48.66898'
+  lon: '20.823334'
+  name: Hačava, sedlo
+  type: sign
+2014-Hacava-Haj:
+  description: null
+  elevation: '268.287628'
+  lat: '48.628435'
+  lon: '20.855155'
+  name: Háj
+  type: city
+2014-Hacava-HajskeVodopady:
+  description: Hájska dolina obklopená skalami s viacerými vodopádmi.
+  elevation: '369.302002'
+  lat: '48.640744'
+  lon: '20.84889'
+  name: Hájske vodopády
+  type: waterfall
+2014-Hacava-KupeleStos:
+  description: Malé kúpele s premeňom
+  elevation: '622.345032'
+  lat: '48.722012'
+  lon: '20.79119'
+  name: Kúpele Štós
+  type: poi
+2014-Hacava-Smolnik:
+  description: null
+  elevation: '553.547729'
+  lat: '48.729841'
+  lon: '20.73967'
+  name: Smolník
+  type: city
+2014-Hacava-SochaAnjela,Haj:
+  description: Veľká socha anjela. Ide o rekvizitu s natáčania filmu.
+  elevation: '279.510315'
+  lat: '48.628683'
+  lon: '20.857237'
+  name: Socha Anjela, Háj
+  type: poi
+2014-Hacava-Stos:
+  description: null
+  elevation: '430.040375'
+  lat: '48.708271'
+  lon: '20.79119'
+  name: Štós
+  type: city
+2014-Hacava-StoskeSedlo:
+  description: null
+  elevation: '782.538452'
+  lat: '48.722242'
+  lon: '20.761911'
+  name: Štóske sedlo
+  type: sign
+2014-Hacava-TurnaNadBodvou:
+  description: null
+  elevation: '178.656296'
+  lat: '48.597721'
+  lon: '20.887063'
+  name: Turňa nad Bodvou
+  type: city
+2014-Hacava-ZidovskyCintorin,Smolnik:
+  description: null
+  elevation: '519.468506'
+  lat: '48.736871'
+  lon: '20.757266'
+  name: Židovský cintorín, Smolník
+  type: poi
 2017-Krivan-JamskePleso:
   description: null
   elevation: '1452.407715'
@@ -96,6 +173,55 @@
   lon: '20.410822'
   name: Vlachovo
   type: city
+2021-LabskyKanon-Decin:
+  description: null
+  elevation: '134.0'
+  lat: '50.780476'
+  lon: '14.210342'
+  name: Dečín
+  type: city
+2021-LabskyKanon-LabskaStran:
+  description: null
+  elevation: '323.0'
+  lat: '50.848891'
+  lon: '14.232324'
+  name: Labská stráň
+  type: city
+2021-LabskyKanon-RuzovaVyhlidka:
+  description: null
+  elevation: '428.969147'
+  lat: '50.806244'
+  lon: '14.244352'
+  name: Ružová vyhlídka
+  type: view
+2021-LabskyKanon-SneznickaVyhlidka:
+  description: null
+  elevation: '283.773132'
+  lat: '50.787866'
+  lon: '14.233237'
+  name: Sněžnická vyhlídka
+  type: view
+2021-LabskyKanon-StolicnaHora:
+  description: null
+  elevation: '281.624481'
+  lat: '50.785265'
+  lon: '14.227884'
+  name: Stoličná hora
+  type: peak
+2021-LabskyKanon-VyhlidkaBelveder:
+  description: null
+  elevation: '273.744293'
+  lat: '50.849526'
+  lon: '14.221531'
+  name: vyhlídka Belveder
+  type: view
+2021-LabskyKanon-VyhlidkaLabskaStraz:
+  description: null
+  elevation: '272.7276'
+  lat: '50.788927'
+  lon: '14.235372'
+  name: Vyhlídka Labská stráž
+  type: view
 2021-MartinskeHole-FerrataMartinskeHole:
   description: Ferrata cez dolinu - pomerne obtiažna, kvůli množstvu vody
   elevation: '932.522766'
@@ -131,6 +257,63 @@
   lon: '18.85951'
   name: Partizánsky kanón
   type: poi
+2021-Porac-Olcnava:
+  description: null
+  elevation: '402.014618'
+  lat: '48.926377'
+  lon: '20.748904'
+  name: Olcnava
+  type: city
+2021-Porac-Plostiny:
+  description: null
+  elevation: '475.9422'
+  lat: '48.882997'
+  lon: '20.809943'
+  name: Ploštiny
+  type: sign
+2021-Porac-Porac:
+  description: null
+  elevation: '769.735046'
+  lat: '48.884009'
+  lon: '20.72379'
+  name: Poráč
+  type: city
+2021-Porac-PoracskaDolina-BanskeMuzeum:
+  description: Po okolí sú vystavené banské stroje aj banský vláčik. Dá sa nazrieť
+    aj do štôlne. Neďaleko je lyžiarsky vlek a Poráč park, kde sa dá ísť najesť.
+  elevation: '604.445679'
+  lat: '48.878319'
+  lon: '20.740989'
+  name: Poráčska dolina - banské múzeum
+  type: poi
+2021-Porac-SarkanovaDiera:
+  description: Malá prístupná jaskyňa. Jaskyňa pokračuje no pokračovanie je zamrežované.
+  elevation: '697.397034'
+  lat: '48.894392'
+  lon: '20.73177'
+  name: Šarkanova diera
+  type: cave
+2021-Porac-Slovinky:
+  description: null
+  elevation: '441.100983'
+  lat: '48.879755'
+  lon: '20.844252'
+  name: Slovinky
+  type: city
+2021-Porac-VodopadSiklavaSkala:
+  description: null
+  elevation: '547.850525'
+  lat: '48.907035'
+  lon: '20.723538'
+  name: Vodopád Sikľavá skala
+  type: waterfall
+2021-Porac-VysokyVrch:
+  description: null
+  elevation: '872.335571'
+  lat: '48.889108'
+  lon: '20.725646'
+  name: Vysoký vrch
+  type: view
 2022-Palava-ArcheoparkPavlov:
   description: Archeologický park Pavlov - nálezisko z praveku
   elevation: '188.453918'
@@ -250,6 +433,69 @@
   lon: '20.3645353'
   name: Štítnik, kostol
   type: poi
+2023-Krivoklatsko-ByvalaCachovna:
+  description: Bývalá banská cáchovna prerobená na reštauráciu.
+  elevation: '382.247009'
+  lat: '49.980844'
+  lon: '13.94681'
+  name: Bývala cáchovna
+  type: poi
+2023-Krivoklatsko-HradKrivoklat:
+  description: null
+  elevation: '287.891632'
+  lat: '50.037582'
+  lon: '13.873556'
+  name: hrad Křivoklát
+  type: castle
+2023-Krivoklatsko-Krivoklat:
+  description: Stanica Křivoklát
+  elevation: '254.679718'
+  lat: '50.038121'
+  lon: '13.869'
+  name: Křivoklát
+  type: city
+2023-Krivoklatsko-Nizbor:
+  description: null
+  elevation: '233.0'
+  lat: '50.002447'
+  lon: '14.002825'
+  name: Nižbor
+  type: city
+2023-Krivoklatsko-NovyJachymov:
+  description: null
+  elevation: '360.355133'
+  lat: '49.981358'
+  lon: '13.943623'
+  name: Nový Jáchymov
+  type: city
+2023-Krivoklatsko-Roztoky:
+  description: null
+  elevation: '279.228821'
+  lat: '50.026574'
+  lon: '13.867566'
+  name: Roztoky
+  type: city
+2023-Krivoklatsko-StareDuby:
+  description: Tri veľmi staré duby na okraji lesa
+  elevation: '424.0'
+  lat: '49.992271'
+  lon: '13.901416'
+  name: Staré duby
+  type: poi
+2023-Krivoklatsko-VyhlidkaParaplicko:
+  description: null
+  elevation: '270.313843'
+  lat: '50.031392'
+  lon: '13.868991'
+  name: Vyhlídka Paraplíčko
+  type: view
+2023-Krivoklatsko-ZamekLeontyn:
+  description: null
+  elevation: '467.0'
+  lat: '49.996447'
+  lon: '13.893369'
+  name: Zámek Leontýn
+  type: castle
 2023-LipanyMincolKamenickyHrad:
   description: Zrúcanina Kamenického hradu s nádherným výhľadom
   elevation: '693.811279'
@@ -511,3 +757,52 @@ VelkaRuzinskaJaskyna:
   lon: '21.117883'
   name: Veľká Ružínska jaskyňa
   type: sign
+points-Domasa,Kemp:
+  description: Kemp na Domaši s plážou a bufetom
+  elevation: '174.711136'
+  lat: '49.005285'
+  lon: '21.706876'
+  name: Domaša, kemp
+  type: sleep
+points-Domasa-Holcikovce,Eva:
+  description: Pláž na domaši s reštauráciou a barom
+  elevation: '163.022247'
+  lat: '49.016768'
+  lon: '21.712393'
+  name: Domaša - Holčíkovce, Eva
+  type: sign
+points-HradLandstejn:
+  description: Zrúcanina hradu Landštejn
+  elevation: '652.0'
+  lat: '49.024156'
+  lon: '15.230919'
+  name: Hrad Landštejn
+  type: castle
+points-KupaliskoSninskeRybniky:
+  description: Biokúpalisko Sninské rybníky
+  elevation: '271.136047'
+  lat: '48.974403'
+  lon: '22.190063'
+  name: Kúpalisko Sninské rybníky
+  type: poi
+points-Michalovce:
+  description: null
+  elevation: '110.449883'
+  lat: '48.756577'
+  lon: '21.918409'
+  name: Michalovce
+  type: city
+points-Snina:
+  description: null
+  elevation: '220.812393'
+  lat: '48.988401'
+  lon: '22.154507'
+  name: Snina
+  type: city
+points-Telc:
+  description: Mesto so zaujímavým centrom zaradeným do UNESCO
+  elevation: '521.027832'
+  lat: '49.185088'
+  lon: '15.451353'
+  name: Telč
+  type: city

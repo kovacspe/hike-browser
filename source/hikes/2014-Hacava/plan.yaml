@@ -1,0 +1,84 @@
+date: '2014-01-01'
+name: Smolník - Štós - Hájska dolina
+places:
+  - description: null
+    name: Smolník
+    ref: 2014-Hacava-Smolnik
+    rest_time: 0:00
+  - description: null
+    name: Židovský cintorín, Smolník
+    ref: 2014-Hacava-ZidovskyCintorin,Smolnik
+    rest_time: 0:10
+  - description: null
+    name: Štóske sedlo
+    ref: 2014-Hacava-StoskeSedlo
+    rest_time: 0:10
+  - description: null
+    name: Kúpele Štós
+    ref: 2014-Hacava-KupeleStos
+    rest_time: 0:30
+  - description: null
+    name: Štós
+    ref: 2014-Hacava-Stos
+    rest_time: 0:05
+  - description: null
+    name: Hačava, sedlo
+    ref: 2014-Hacava-Hacava,Sedlo
+    rest_time: 0:05
+  - description: null
+    name: Hačava
+    ref: 2014-Hacava-Hacava
+    rest_time: 0:00
+  - description: null
+    name: Hájske vodopády
+    ref: 2014-Hacava-HajskeVodopady
+    rest_time: 0:10
+  - description: null
+    name: Háj
+    ref: 2014-Hacava-Haj
+    rest_time: 0:00
+  - description: null
+    name: Socha Anjela, Háj
+    ref: 2014-Hacava-SochaAnjela,Haj
+    rest_time: 0:05
+  - description: null
+    name: Turňa nad Bodvou
+    ref: 2014-Hacava-TurnaNadBodvou
+    rest_time: 0:00
+segments:
+  - name: Smolník - Židovský cintorín, Smolník
+    time: 0:30
+    travel_by: foot
+  - name: Židovský cintorín, Smolník - Štóske sedlo
+    time: 1:30
+    travel_by: foot
+  - name: Štóske sedlo - Kúpele Štós
+    time: 0:30
+    travel_by: foot
+  - name: Kúpele Štós - Štós
+    time: 0:30
+    travel_by: foot
+  - name: Štós - Hačava, sedlo
+    time: 2:30
+    travel_by: foot
+  - name: Hačava, sedlo - Hačava
+    time: 0:20
+    travel_by: foot
+  - name: Hačava - Hájske vodopády
+    time: 1:00
+    travel_by: foot
+  - name: Hájske vodopády - Háj
+    time: 0:30
+    travel_by: foot
+  - name: Háj - Socha Anjela, Háj
+    time: 0:05
+    travel_by: foot
+  - name: Socha Anjela, Háj - Turňa nad Bodvou
+    time: 1:00
+    travel_by: foot
+start_at: 9:00
+tags:
+  - Slovensko
+  - Slovenský kras
+  - Baníctvo
+with_who: []

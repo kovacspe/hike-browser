@@ -1,0 +1,64 @@
+date: '2024-02-11'
+name: Olcnava - Poráč - Slovinky
+places:
+  - description: null
+    name: Olcnava
+    ref: 2021-Porac-Olcnava
+    rest_time: 0:00
+  - description: null
+    name: Vodopád Sikľavá skala
+    ref: 2021-Porac-VodopadSiklavaSkala
+    rest_time: 0:05
+  - description: null
+    name: Šarkanova diera
+    ref: 2021-Porac-SarkanovaDiera
+    rest_time: 0:15
+  - description: null
+    name: Vysoký vrch
+    ref: 2021-Porac-VysokyVrch
+    rest_time: 0:05
+  - description: null
+    name: Poráč
+    ref: 2021-Porac-Porac
+    rest_time: 0:05
+  - description: null
+    name: Poráčska dolina - banské múzeum
+    ref: 2021-Porac-PoracskaDolina-BanskeMuzeum
+    rest_time: 0:45
+  - description: null
+    name: Ploštiny
+    ref: 2021-Porac-Plostiny
+    rest_time: 0:15
+  - description: null
+    name: Slovinky
+    ref: 2021-Porac-Slovinky
+    rest_time: 0:30
+segments:
+  - name: Olcnava - Vodopád Sikľavá skala
+    time: 1:05
+    travel_by: foot
+  - name: Vodopád Sikľavá skala - Šarkanova diera
+    time: 1:15
+    travel_by: foot
+  - name: Šarkanova diera - Vysoký vrch
+    time: 0:40
+    travel_by: foot
+  - name: Vysoký vrch - Poráč
+    time: 0:15
+    travel_by: foot
+  - name: Poráč - Poráčska dolina - banské múzeum
+    time: 0:25
+    travel_by: foot
+  - name: Poráčska dolina - banské múzeum - Ploštiny
+    time: 1:30
+    travel_by: foot
+  - name: Ploštiny - Slovinky
+    time: 0:40
+    travel_by: foot
+start_at: 9:00
+tags:
+  - Slovensko
+  - Slovenský raj
+  - Spiš
+  - Baníctvo
+with_who: []
