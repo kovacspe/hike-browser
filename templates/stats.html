@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Stats{% endblock %}
+{% block content %}
+<div class="row" style="justify-content: space-between; margin-bottom: 18px;">
+    <h1 style="margin: 0;">Elevation stats</h1>
+    <a href="/frontend/trips">Back to trips</a>
+</div>
+
+<section class="card">
+    <h2 style="margin-top: 0;">Overall</h2>
+    <p style="margin: 0;">Distance: <strong>{{ "%.1f"|format(total_distance) }} km</strong></p>
+    <p style="margin: 0;">Uphill: <strong>{{ "%.0f"|format(total_uphill) }} m</strong></p>
+    <p style="margin: 8px 0 0 0;">Downhill: <strong>{{ "%.0f"|format(total_downhill) }} m</strong></p>
+    <p style="margin: 8px 0 0 0;">Elevation combined: <strong>{{ "%.0f"|format(total_combined) }} m</strong></p>
+</section>
+
+<section class="card">
+    <h2 style="margin-top: 0;">Distance by transport</h2>
+    {% if transport_rows %}
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="text-align: left; border-bottom: 1px solid #d1d5db; padding-bottom: 6px;">Transport</th>
+                <th style="text-align: right; border-bottom: 1px solid #d1d5db; padding-bottom: 6px;">Distance (km)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transport, distance in transport_rows %}
+            <tr>
+                <td style="padding: 8px 0;">{{ transport }}</td>
+                <td style="text-align: right;">{{ "%.1f"|format(distance) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="muted" style="margin: 0;">No transport distance data yet.</p>
+    {% endif %}
+</section>
+
+<section class="card">
+    <h2 style="margin-top: 0;">By year</h2>
+    {% if years %}
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="text-align: left; border-bottom: 1px solid #d1d5db; padding-bottom: 6px;">Year</th>
+                <th style="text-align: right; border-bottom: 1px solid #d1d5db; padding-bottom: 6px;">Distance (km)</th>
+                <th style="text-align: right; border-bottom: 1px solid #d1d5db; padding-bottom: 6px;">Uphill (m)</th>
+                <th style="text-align: right; border-bottom: 1px solid #d1d5db; padding-bottom: 6px;">Downhill (m)</th>
+                <th style="text-align: right; border-bottom: 1px solid #d1d5db; padding-bottom: 6px;">Elevation combined (m)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for year, values in years %}
+            <tr>
+                <td style="padding: 8px 0;">{{ year }}</td>
+                <td style="text-align: right;">{{ "%.1f"|format(values.distance) }}</td>
+                <td style="text-align: right;">{{ "%.0f"|format(values.uphill_m) }}</td>
+                <td style="text-align: right;">{{ "%.0f"|format(values.downhill_m) }}</td>
+                <td style="text-align: right;">{{ "%.0f"|format(values.uphill_m + values.downhill_m) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="muted" style="margin: 0;">No transport elevation data yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

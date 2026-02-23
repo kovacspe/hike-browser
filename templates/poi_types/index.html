@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}POI Types{% endblock %}
+{% block content %}
+<div class="row" style="justify-content: space-between; margin-bottom: 18px;">
+    <h1 style="margin: 0;">POI type management</h1>
+    <a href="/frontend/trips">Back to trips</a>
+</div>
+
+<section class="card">
+    <h2 style="margin-top: 0;">Create POI type</h2>
+    <form method="post" action="/frontend/poi-types" class="row">
+        <input type="text" name="name" placeholder="POI type name" required>
+        <input type="text" name="material_icon_name" value="place" placeholder="Material icon name" required>
+        <button type="submit">Add POI type</button>
+    </form>
+    <p class="muted" style="margin: 8px 0 0 0;">
+        Use Google Material icon name, e.g. <code>hotel</code>, <code>restaurant</code>, <code>landscape</code>.
+    </p>
+</section>
+
+<section class="card">
+    <h2 style="margin-top: 0;">Existing POI types</h2>
+    {% if poi_types %}
+    <div style="display: grid; gap: 10px;">
+        {% for poi_type in poi_types %}
+        <form method="post" action="/frontend/poi-types/{{ poi_type.id }}/edit" class="row" style="justify-content: space-between;">
+            <div class="row">
+                <input type="text" name="name" value="{{ poi_type.name }}" required>
+                <input type="text" name="material_icon_name" value="{{ poi_type.material_icon_name }}" required>
+                <span class="chip">
+                    <span class="material-icons">{{ poi_type.material_icon_name }}</span>{{ poi_type.name }}
+                </span>
+            </div>
+            <div class="row">
+                <button type="submit">Save</button>
+                <button
+                    type="submit"
+                    formaction="/frontend/poi-types/{{ poi_type.id }}/delete"
+                    formmethod="post"
+                    onclick="return confirm('Delete POI type {{ poi_type.name }}?');"
+                    class="ghost-btn"
+                >
+                    Delete
+                </button>
+            </div>
+        </form>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted" style="margin: 0;">No POI types yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

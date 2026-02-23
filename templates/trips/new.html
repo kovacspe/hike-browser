@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Create Trip{% endblock %}
+{% block content %}
+<div class="row" style="justify-content: space-between; margin-bottom: 18px;">
+    <h1 style="margin: 0;">Create trip</h1>
+    <a href="/frontend/trips">Back to trips</a>
+</div>
+
+<form class="card" method="post" action="/frontend/trips/new">
+    <div style="display: grid; gap: 12px;">
+        <label>
+            Name<br>
+            <input type="text" name="name" required>
+        </label>
+        <label class="row" style="align-items: center;">
+            <input id="is_plan" type="checkbox" name="is_plan" onchange="toggleTripDates()">
+            Plan trip (no fixed date)
+        </label>
+        <label id="start_date_field">
+            Start date<br>
+            <input type="date" name="start_date">
+        </label>
+        <label id="end_date_field">
+            End date<br>
+            <input type="date" name="end_date">
+        </label>
+        <label>
+            Tags<br>
+            <select name="tag_ids" multiple size="5">
+                {% for tag in tags %}
+                <option value="{{ tag.id }}">{{ tag.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <div>
+            <button type="submit">Save trip</button>
+        </div>
+    </div>
+</form>
+<script>
+function toggleTripDates() {
+    const checked = document.getElementById("is_plan").checked;
+    const startField = document.getElementById("start_date_field");
+    const endField = document.getElementById("end_date_field");
+    if (startField) startField.style.display = checked ? "none" : "block";
+    if (endField) endField.style.display = checked ? "none" : "block";
+}
+</script>
+{% endblock %}

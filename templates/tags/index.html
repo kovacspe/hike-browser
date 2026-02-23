@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Tags{% endblock %}
+{% block content %}
+<div class="row" style="justify-content: space-between; margin-bottom: 18px;">
+    <h1 style="margin: 0;">Tag management</h1>
+    <a href="/frontend/trips">Back to trips</a>
+</div>
+
+<section class="card">
+    <h2 style="margin-top: 0;">Create tag</h2>
+    <form method="post" action="/frontend/tags" class="row">
+        <input type="text" name="name" placeholder="Tag name" required>
+        <input type="color" name="color" value="#94A3B8" title="Tag color">
+        <button type="submit">Add tag</button>
+    </form>
+</section>
+
+<section class="card">
+    <h2 style="margin-top: 0;">Existing tags</h2>
+    {% if tags %}
+    <div style="display: grid; gap: 10px;">
+        {% for tag in tags %}
+        <form method="post" action="/frontend/tags/{{ tag.id }}/edit" class="row" style="justify-content: space-between;">
+            <div class="row">
+                <input type="text" name="name" value="{{ tag.name }}" required>
+                <input type="color" name="color" value="{{ tag.color }}" title="Tag color">
+                <span class="chip" style="background: {{ tag.color }}22; color: {{ tag.color }};">
+                    <span class="material-icons">label</span>{{ tag.name }}
+                </span>
+            </div>
+            <div class="row">
+                <button type="submit">Save</button>
+                <button
+                    type="submit"
+                    formaction="/frontend/tags/{{ tag.id }}/delete"
+                    formmethod="post"
+                    onclick="return confirm('Delete tag {{ tag.name }}?');"
+                    class="ghost-btn"
+                >
+                    Delete
+                </button>
+            </div>
+        </form>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted" style="margin: 0;">No tags yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,1197 @@
+{% extends "base.html" %}
+{% block title %}{{ trip.name }}{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+    .trip-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        margin-bottom: 16px;
+    }
+    .panel {
+        display: none;
+        margin-bottom: 16px;
+    }
+    .panel.show {
+        display: block;
+    }
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+    }
+    .day-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .item-card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px;
+        background: #f9fcfd;
+    }
+    .item-head {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    .icon-badge {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--accent-soft);
+        color: var(--accent);
+        flex-shrink: 0;
+    }
+    .draggable-item.dragging {
+        opacity: 0.5;
+    }
+    .day-content.collapsed {
+        display: none;
+    }
+    .inline-slot {
+        margin-top: 10px;
+    }
+    .insert-slot {
+        margin: 0;
+    }
+    .insert-row {
+        display: flex;
+        justify-content: center;
+    }
+    .insert-row-inline {
+        position: relative;
+        height: 0;
+        margin: 0;
+        z-index: 2;
+        pointer-events: none;
+    }
+    .insert-row-inline .insert-inline-btn {
+        pointer-events: auto;
+        transform: translateY(-50%);
+        background: #ffffff;
+        border-color: var(--border);
+    }
+    .insert-row-end {
+        margin-top: 6px;
+    }
+    .insert-inline-btn {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        min-height: 24px;
+        padding: 0;
+        opacity: 0.45;
+    }
+    .insert-inline-btn .material-icons {
+        font-size: 16px;
+    }
+    .insert-inline-btn:hover {
+        opacity: 0.9;
+    }
+    .insert-end-btn {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        min-height: 42px;
+        padding: 0;
+    }
+    .insert-end-btn .material-icons {
+        font-size: 26px;
+    }
+    #route-map {
+        width: 100%;
+        height: 360px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+    }
+    #elevation-profile {
+        width: 100%;
+        min-height: 220px;
+    }
+</style>
+
+<div class="trip-header">
+    <div>
+        <div class="row">
+            <h1 style="margin: 0;">{{ trip.name }}</h1>
+            {% if trip.is_plan %}
+            <span class="chip"><span class="material-icons">event_note</span>Plan</span>
+            {% endif %}
+        </div>
+        <p class="muted" style="margin: 8px 0 0 0;">
+            {% if trip.is_plan %}
+            No fixed date
+            {% else %}
+            {{ trip.start_date or "-" }} to {{ trip.end_date or "-" }}
+            {% endif %}
+        </p>
+        {% if trip.tags %}
+        <div class="row" style="margin-top: 8px;">
+            {% for tag in trip.tags %}
+            <span class="chip" style="background: {{ tag.color }}22; color: {{ tag.color }};">
+                <span class="material-icons">label</span>{{ tag.name }}
+            </span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        <button type="button" class="ghost-btn" onclick="togglePanel('trip-edit-panel')">Edit trip</button>
+        <a href="/frontend/trips">Back to trips</a>
+    </div>
+</div>
+
+<section id="trip-edit-panel" class="card panel">
+    <div class="row" style="justify-content: space-between;">
+        <h2 style="margin: 0;">Edit trip</h2>
+        <button type="button" class="ghost-btn" onclick="togglePanel('trip-edit-panel')">Close</button>
+    </div>
+    <form method="post" action="/frontend/trips/{{ trip.id }}/edit" class="form-grid" style="margin-top: 12px;">
+        <label>
+            Name<br>
+            <input type="text" name="name" value="{{ trip.name }}" required>
+        </label>
+        <label class="row" style="align-items: center;">
+            <input id="edit_trip_is_plan" type="checkbox" name="is_plan" {% if trip.is_plan %}checked{% endif %} onchange="toggleTripEditDates()">
+            Plan trip (no fixed date)
+        </label>
+        <label id="edit_trip_start_date_field">
+            Start date<br>
+            <input type="date" name="start_date" value="{{ trip.start_date }}">
+        </label>
+        <label id="edit_trip_end_date_field">
+            End date<br>
+            <input type="date" name="end_date" value="{{ trip.end_date }}">
+        </label>
+        <label>
+            Tags<br>
+            <select name="tag_ids" multiple size="5">
+                {% for tag in tag_types %}
+                <option value="{{ tag.id }}" {% if tag in trip.tags %}selected{% endif %}>{{ tag.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <div style="align-self: end;">
+            <button type="submit">Save trip</button>
+        </div>
+    </form>
+</section>
+
+<section id="day-panel" class="card panel">
+    <div class="row" style="justify-content: space-between;">
+        <h2 style="margin: 0;">Add day</h2>
+        <button type="button" class="ghost-btn" onclick="togglePanel('day-panel')">Close</button>
+    </div>
+    <form method="post" action="/frontend/trips/{{ trip.id }}/days" class="row" style="margin-top: 12px;">
+        <input type="date" name="date" required>
+        <button type="submit">Save day</button>
+    </form>
+</section>
+
+<section id="item-panel" class="card panel">
+    <div class="row" style="justify-content: space-between;">
+        <h2 style="margin: 0;">Add item</h2>
+        <button type="button" class="ghost-btn" onclick="togglePanel('item-panel')">Close</button>
+    </div>
+    <form method="post" action="/frontend/trips/{{ trip.id }}/items" class="form-grid" style="margin-top: 12px;">
+        <input id="insert_position_input" type="hidden" name="insert_position" value="">
+        <label>
+            Title<br>
+            <input type="text" name="title" required>
+        </label>
+        <label>
+            Type<br>
+            <select id="item_type" name="item_type" required onchange="toggleItemTypeFields()">
+                <option value="poi">POI</option>
+                <option value="transport">Transport</option>
+            </select>
+        </label>
+        <label>
+            Day<br>
+            <select id="day_id_select" name="day_id">
+                <option value="">Unassigned</option>
+                {% for day in trip.days|sort(attribute="date") %}
+                <option value="{{ day.id }}">{{ day.date }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            Description<br>
+            <textarea name="description" rows="2"></textarea>
+        </label>
+        <label>
+            Fixed start time (optional)<br>
+            <input type="time" name="start_time">
+        </label>
+        <label>
+            Duration minutes (optional)<br>
+            <input type="number" min="0" step="5" name="duration_minutes">
+        </label>
+        <label id="poi-type-field">
+            POI type<br>
+            <select name="poi_type_id">
+                {% for poi_type in poi_types %}
+                <option value="{{ poi_type.id }}">{{ poi_type.name }} ({{ poi_type.material_icon_name }})</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label id="transport-type-field" style="display: none;">
+            Transport type<br>
+            <select name="transport_type">
+                <option value="">Select</option>
+                <option value="walk">Walk</option>
+                <option value="train">Train</option>
+                <option value="car">Car</option>
+            </select>
+        </label>
+        <label class="transport-field" style="display: none;">
+            Distance km<br>
+            <input type="number" step="0.1" min="0" name="distance_km">
+        </label>
+        <label class="transport-field" style="display: none;">
+            Uphill m<br>
+            <input type="number" step="1" min="0" name="uphill_m">
+        </label>
+        <label class="transport-field" style="display: none;">
+            Downhill m<br>
+            <input type="number" step="1" min="0" name="downhill_m">
+        </label>
+        <label>
+            Tags<br>
+            <select name="tag_ids" multiple size="4">
+                {% for tag_type in tag_types %}
+                <option value="{{ tag_type.id }}">{{ tag_type.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <div style="align-self: end;">
+            <button type="submit">Save item</button>
+        </div>
+    </form>
+    {% if not trip.days %}
+    <p class="muted" style="margin: 10px 0 0 0;">No days yet. Item will be created as unassigned.</p>
+    {% endif %}
+</section>
+
+<section id="edit-panel" class="card panel">
+    <div class="row" style="justify-content: space-between;">
+        <h2 style="margin: 0;">Edit item</h2>
+        <button type="button" class="ghost-btn" onclick="togglePanel('edit-panel')">Close</button>
+    </div>
+    <form id="edit-item-form" method="post" action="" class="form-grid" style="margin-top: 12px;">
+        <label>
+            Title<br>
+            <input id="edit_title" type="text" name="title" required>
+        </label>
+        <label>
+            Type<br>
+            <select id="edit_item_type" name="item_type" required onchange="toggleEditTypeFields()">
+                <option value="poi">POI</option>
+                <option value="transport">Transport</option>
+            </select>
+        </label>
+        <label>
+            Day<br>
+            <select id="edit_day_id" name="day_id">
+                <option value="">Unassigned</option>
+                {% for day in trip.days|sort(attribute="date") %}
+                <option value="{{ day.id }}">{{ day.date }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            Description<br>
+            <textarea id="edit_description" name="description" rows="2"></textarea>
+        </label>
+        <label>
+            Fixed start time (optional)<br>
+            <input id="edit_start_time" type="time" name="start_time">
+        </label>
+        <label>
+            Duration minutes (optional)<br>
+            <input id="edit_duration_minutes" type="number" min="0" step="5" name="duration_minutes">
+        </label>
+        <label id="edit_poi_type_field">
+            POI type<br>
+            <select id="edit_poi_type_id" name="poi_type_id">
+                {% for poi_type in poi_types %}
+                <option value="{{ poi_type.id }}">{{ poi_type.name }} ({{ poi_type.material_icon_name }})</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label id="edit_transport_type_field" style="display: none;">
+            Transport type<br>
+            <select id="edit_transport_type" name="transport_type">
+                <option value="">Select</option>
+                <option value="walk">Walk</option>
+                <option value="train">Train</option>
+                <option value="car">Car</option>
+            </select>
+        </label>
+        <label class="edit_transport_field" style="display: none;">
+            Distance km<br>
+            <input id="edit_distance_km" type="number" step="0.1" min="0" name="distance_km">
+        </label>
+        <label class="edit_transport_field" style="display: none;">
+            Uphill m<br>
+            <input id="edit_uphill_m" type="number" step="1" min="0" name="uphill_m">
+        </label>
+        <label class="edit_transport_field" style="display: none;">
+            Downhill m<br>
+            <input id="edit_downhill_m" type="number" step="1" min="0" name="downhill_m">
+        </label>
+        <label>
+            Tags<br>
+            <select id="edit_tag_ids" name="tag_ids" multiple size="4">
+                {% for tag_type in tag_types %}
+                <option value="{{ tag_type.id }}">{{ tag_type.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <div style="align-self: end;">
+            <button type="submit">Save changes</button>
+        </div>
+    </form>
+</section>
+
+<section id="route-import-panel" class="card panel">
+    <h2 style="margin-top: 0;">Route Import And Auto-Generate</h2>
+    <p class="muted" style="margin-top: 0;">
+        Selected day: <strong id="route-target-day-label">-</strong><br>
+        1) Import GPX from mapy.cz, 2) add your POI markers (lat/lon), 3) generate itinerary segments into selected day.
+    </p>
+    <div class="row" style="align-items: flex-end;">
+        <form method="post" action="/frontend/trips/{{ trip.id }}/route/import" enctype="multipart/form-data" class="row">
+            <input class="route-target-day-input" type="hidden" name="target_day_id" value="">
+            <label>
+                GPX file<br>
+                <input type="file" name="gpx_file" accept=".gpx" required>
+            </label>
+            <button type="submit">Import GPX</button>
+        </form>
+        <span class="chip"><span class="material-icons">route</span>{{ route_points_count }} points / {{ "%.2f"|format(route_total_km) }} km</span>
+        <span class="chip"><span class="material-icons">trending_up</span>{{ "%.0f"|format(route_uphill_m) }} m</span>
+        <span class="chip"><span class="material-icons">trending_down</span>{{ "%.0f"|format(route_downhill_m) }} m</span>
+        <button type="button" class="ghost-btn" onclick="toggleElevationProfile()">Elevation profile</button>
+    </div>
+
+    <div style="margin-top: 12px;">
+        <p id="route-map-title" class="muted" style="margin: 0 0 8px 0;">Full route</p>
+        <div id="route-map"></div>
+        <p class="muted" style="margin: 8px 0 0 0;">
+            Click map to sample nearest point on route and prefill marker lat/lon.
+        </p>
+    </div>
+    <div id="elevation-profile-panel" class="card panel" style="margin-top: 12px;">
+        <h3 style="margin-top: 0;">Elevation profile</h3>
+        <div id="elevation-profile"></div>
+        <p id="elevation-profile-meta" class="muted" style="margin: 8px 0 0 0;"></p>
+    </div>
+
+    <div class="card" style="margin-top: 12px;">
+        <h3 style="margin-top: 0;">Add marker on route</h3>
+        <form method="post" action="/frontend/trips/{{ trip.id }}/route/markers" class="form-grid">
+            <input class="route-target-day-input" type="hidden" name="target_day_id" value="">
+            <label>
+                Title<br>
+                <input type="text" name="title" required>
+            </label>
+            <label>
+                POI type<br>
+                <select name="poi_type_id" required>
+                    {% for poi_type in poi_types %}
+                    <option value="{{ poi_type.id }}">{{ poi_type.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>
+                Latitude<br>
+                <input id="marker-latitude" type="number" step="0.000001" name="latitude" required>
+            </label>
+            <label>
+                Longitude<br>
+                <input id="marker-longitude" type="number" step="0.000001" name="longitude" required>
+            </label>
+            <label>
+                Description<br>
+                <input type="text" name="description">
+            </label>
+            <div style="align-self: end;">
+                <button type="submit">Add marker</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card" style="margin-top: 12px;">
+        <h3 style="margin-top: 0;">Route markers</h3>
+        {% if route_markers %}
+        <div style="display: grid; gap: 8px;">
+            {% for marker in route_markers %}
+            <div class="row" style="justify-content: space-between;">
+                <div class="row">
+                    <span class="chip"><span class="material-icons">place</span>{{ marker.title }}</span>
+                    <span class="chip">{{ marker.poi_type.name if marker.poi_type else "poi" }}</span>
+                    <span class="chip">{{ "%.2f"|format(marker.snapped_distance_m / 1000.0) }} km</span>
+                </div>
+                <form method="post" action="/frontend/trips/{{ trip.id }}/route/markers/{{ marker.id }}/delete">
+                    <input class="route-target-day-input" type="hidden" name="target_day_id" value="">
+                    <button type="submit" class="ghost-btn">Delete</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="muted" style="margin: 0;">No markers yet.</p>
+        {% endif %}
+    </div>
+
+    <form method="post" action="/frontend/trips/{{ trip.id }}/route/generate" class="row" style="margin-top: 12px;">
+        <input id="route-target-day-id" type="hidden" name="day_id" value="">
+        <label class="row" style="align-items: center;">
+            <input type="checkbox" name="clear_existing" checked>
+            Replace existing items in selected day
+        </label>
+        <button type="submit">Generate Itinerary From Route</button>
+    </form>
+</section>
+
+{% if trip.days %}
+{% set totals = namespace(distance=0.0, up=0.0, down=0.0) %}
+<section class="card">
+    <h2 style="margin-top: 0;">Days</h2>
+    <div class="day-grid">
+        {% for day in trip.days|sort(attribute="date") %}
+        {% set day_totals = namespace(distance=0.0, up=0.0, down=0.0) %}
+        <article class="card" style="margin: 0;">
+            {% set day_list = day_items.get(day.id, []) %}
+            <div class="row" style="justify-content: space-between; margin-bottom: 8px;">
+                <strong>{{ day.date }}</strong>
+                <div class="row">
+                    <span class="chip"><span class="material-icons">format_list_bulleted</span>{{ day_list|length }} items</span>
+                    <button type="button" class="icon-btn ghost-btn" onclick="openItemPanel('{{ day.id }}', 'day-item-slot-{{ day.id }}')" title="Add item to this day">
+                        <span class="material-icons">add</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="icon-btn ghost-btn"
+                        onclick="showDayOnMap('{{ day.id }}', 'day-route-slot-{{ day.id }}', '{{ day.date }}')"
+                        title="Show this day on map"
+                    >
+                        <span class="material-icons">map</span>
+                    </button>
+                    <button
+                        id="route-import-btn-day-{{ day.id }}"
+                        type="button"
+                        class="icon-btn ghost-btn"
+                        onclick="openRouteImportPanel('{{ day.id }}', 'day-route-slot-{{ day.id }}', '{{ day.date }}')"
+                        title="Import GPX into this day"
+                    >
+                        <span class="material-icons">file_upload</span>
+                    </button>
+                    <button type="button" class="icon-btn ghost-btn" onclick="toggleDay('{{ day.id }}')" title="Collapse/expand day">
+                        <span id="day-toggle-icon-{{ day.id }}" class="material-icons">expand_less</span>
+                    </button>
+                </div>
+            </div>
+            <div id="day-content-{{ day.id }}" class="day-content">
+            <div id="day-route-slot-{{ day.id }}" class="inline-slot"></div>
+            <div id="day-item-slot-{{ day.id }}" class="inline-slot"></div>
+            <div style="display: grid; gap: 10px;" class="drop-zone" data-day-id="{{ day.id }}">
+                <div id="insert-slot-day-{{ day.id }}-0" class="insert-slot"></div>
+                <div class="insert-row {% if day_list %}insert-row-inline{% else %}insert-row-end{% endif %}">
+                    <button
+                        type="button"
+                        class="icon-btn ghost-btn {% if day_list %}insert-inline-btn{% else %}insert-end-btn{% endif %}"
+                        onclick="openItemPanel('{{ day.id }}', 'insert-slot-day-{{ day.id }}-0', 0)"
+                        title="Insert item here"
+                    >
+                        <span class="material-icons">add</span>
+                    </button>
+                </div>
+                {% if day_list %}
+                {% for item in day_list %}
+                {% set item_distance = item.distance_km or 0.0 %}
+                {% set item_up = item.uphill_m or 0.0 %}
+                {% set item_down = item.downhill_m or 0.0 %}
+                {% set day_totals.distance = day_totals.distance + item_distance %}
+                {% set day_totals.up = day_totals.up + item_up %}
+                {% set day_totals.down = day_totals.down + item_down %}
+                {% set totals.distance = totals.distance + item_distance %}
+                {% set totals.up = totals.up + item_up %}
+                {% set totals.down = totals.down + item_down %}
+
+                {% if item.item_type == "poi" %}
+                    {% set icon_name = item.poi_type.material_icon_name if item.poi_type else "place" %}
+                {% elif item.transport_type == "train" %}
+                    {% set icon_name = "train" %}
+                {% elif item.transport_type == "car" %}
+                    {% set icon_name = "directions_car" %}
+                {% else %}
+                    {% set icon_name = "directions_walk" %}
+                {% endif %}
+
+                <div class="item-card draggable-item" draggable="true" data-item-id="{{ item.id }}">
+                    <div class="item-head">
+                        <span class="icon-badge"><span class="material-icons">{{ icon_name }}</span></span>
+                        <div style="flex: 1;">
+                            <div class="row" style="justify-content: space-between;">
+                                <strong>{{ item.title }}</strong>
+                                <div class="row">
+                                    {% set timing = day_schedules.get(day.id, {}).get(item.id, {}) %}
+                                    {% if timing.get("start") %}
+                                    <span class="chip"><span class="material-icons">schedule</span>{{ timing.get("start") }}{% if timing.get("end") %} - {{ timing.get("end") }}{% endif %}</span>
+                                    {% endif %}
+                                    <span class="chip">{{ item.item_type }}</span>
+                                    <button
+                                        type="button"
+                                        class="icon-btn ghost-btn"
+                                        title="Edit item"
+                                        data-item-id="{{ item.id }}"
+                                        data-title="{{ item.title }}"
+                                        data-item-type="{{ item.item_type }}"
+                                        data-day-id="{{ item.day_id if item.day_id is not none else '' }}"
+                                        data-description="{{ item.description or '' }}"
+                                        data-poi-type-id="{{ item.poi_type_id if item.poi_type_id is not none else '' }}"
+                                        data-transport-type="{{ item.transport_type or '' }}"
+                                        data-start-time="{{ item.start_time.strftime('%H:%M') if item.start_time else '' }}"
+                                        data-duration-minutes="{{ item.duration_minutes if item.duration_minutes is not none else '' }}"
+                                        data-distance-km="{{ item.distance_km if item.distance_km is not none else '' }}"
+                                        data-uphill-m="{{ item.uphill_m if item.uphill_m is not none else '' }}"
+                                        data-downhill-m="{{ item.downhill_m if item.downhill_m is not none else '' }}"
+                                        data-tag-ids="{% for tag in item.tags %}{% if not loop.first %},{% endif %}{{ tag.id }}{% endfor %}"
+                                        onclick="openEditPanelFromButton(this)"
+                                    >
+                                        <span class="material-icons">edit</span>
+                                    </button>
+                                    <form
+                                        method="post"
+                                        action="/frontend/trips/{{ trip.id }}/items/{{ item.id }}/delete"
+                                        onsubmit="return confirm('Delete this item?');"
+                                        style="display: inline;"
+                                    >
+                                        <button type="submit" class="icon-btn ghost-btn" title="Delete item">
+                                            <span class="material-icons">delete</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% if item.description %}
+                            <p class="muted" style="margin: 6px 0 0 0;">{{ item.description }}</p>
+                            {% endif %}
+                            {% if item.item_type == "transport" %}
+                            <div class="row" style="margin-top: 8px;">
+                                <span class="chip"><span class="material-icons">route</span>{{ "%.1f"|format(item_distance) }} km</span>
+                                <span class="chip"><span class="material-icons">trending_up</span>{{ "%.0f"|format(item_up) }} m</span>
+                                <span class="chip"><span class="material-icons">trending_down</span>{{ "%.0f"|format(item_down) }} m</span>
+                            </div>
+                            {% endif %}
+                            {% if item.tags %}
+                            <div class="row" style="margin-top: 8px;">
+                                {% for tag in item.tags %}
+                                <span class="chip" style="background: {{ tag.color }}22; color: {{ tag.color }};">
+                                    <span class="material-icons">label</span>{{ tag.name }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div id="insert-slot-day-{{ day.id }}-{{ loop.index }}" class="insert-slot"></div>
+                <div class="insert-row {% if loop.last %}insert-row-end{% else %}insert-row-inline{% endif %}">
+                    {% if loop.last %}
+                    <button
+                        type="button"
+                        class="icon-btn ghost-btn insert-end-btn"
+                        onclick="openItemPanel('{{ day.id }}', 'insert-slot-day-{{ day.id }}-{{ loop.index }}', {{ loop.index }})"
+                        title="Add item at end"
+                    >
+                        <span class="material-icons">add</span>
+                    </button>
+                    {% else %}
+                    <button
+                        type="button"
+                        class="icon-btn ghost-btn insert-inline-btn"
+                        onclick="openItemPanel('{{ day.id }}', 'insert-slot-day-{{ day.id }}-{{ loop.index }}', {{ loop.index }})"
+                        title="Insert item here"
+                    >
+                        <span class="material-icons">add</span>
+                    </button>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="muted" style="margin: 0;">Drop items here.</p>
+                {% endif %}
+            </div>
+            {% if day_list %}
+            <p class="muted" style="margin: 10px 0 0 0;">
+                Day total: dist {{ "%.1f"|format(day_totals.distance) }} km, up {{ "%.0f"|format(day_totals.up) }} m, down {{ "%.0f"|format(day_totals.down) }} m
+            </p>
+            {% else %}
+            <p class="muted" style="margin: 0;">No items for this day yet.</p>
+            {% endif %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    <div class="row" style="justify-content: center; margin-top: 14px;">
+        <button type="button" class="icon-btn" onclick="togglePanel('day-panel')" title="Add day">
+            <span class="material-icons">add</span>
+        </button>
+    </div>
+</section>
+
+<section class="card">
+    <h2 style="margin-top: 0;">Trip totals</h2>
+    <div class="row">
+        <span class="chip"><span class="material-icons">route</span>{{ "%.1f"|format(totals.distance) }} km</span>
+        <span class="chip"><span class="material-icons">trending_up</span>{{ "%.0f"|format(totals.up) }} m</span>
+        <span class="chip"><span class="material-icons">trending_down</span>{{ "%.0f"|format(totals.down) }} m</span>
+    </div>
+</section>
+{% else %}
+<section class="card">
+    <div class="row" style="justify-content: space-between;">
+        <p class="muted" style="margin: 0;">No days added yet.</p>
+        <button type="button" class="icon-btn" onclick="togglePanel('day-panel')" title="Add day">
+            <span class="material-icons">add</span>
+        </button>
+    </div>
+</section>
+{% endif %}
+
+<section class="card">
+    <div class="row" style="justify-content: space-between;">
+        <h2 style="margin: 0;">Unassigned items</h2>
+        <button type="button" class="icon-btn ghost-btn" onclick="openItemPanel('', 'unassigned-item-slot')" title="Add unassigned item">
+            <span class="material-icons">add</span>
+        </button>
+    </div>
+    <div id="unassigned-item-slot" class="inline-slot"></div>
+    <div style="display: grid; gap: 10px; margin-top: 12px;" class="drop-zone" data-day-id="">
+        <div id="insert-slot-unassigned-0" class="insert-slot"></div>
+        <div class="insert-row {% if unassigned_items %}insert-row-inline{% else %}insert-row-end{% endif %}">
+            <button
+                type="button"
+                class="icon-btn ghost-btn {% if unassigned_items %}insert-inline-btn{% else %}insert-end-btn{% endif %}"
+                onclick="openItemPanel('', 'insert-slot-unassigned-0', 0)"
+                title="Insert item here"
+            >
+                <span class="material-icons">add</span>
+            </button>
+        </div>
+        {% if unassigned_items %}
+        {% for item in unassigned_items %}
+        {% set item_distance = item.distance_km or 0.0 %}
+        {% set item_up = item.uphill_m or 0.0 %}
+        {% set item_down = item.downhill_m or 0.0 %}
+        {% if item.item_type == "poi" %}
+            {% set icon_name = item.poi_type.material_icon_name if item.poi_type else "place" %}
+        {% elif item.transport_type == "train" %}
+            {% set icon_name = "train" %}
+        {% elif item.transport_type == "car" %}
+            {% set icon_name = "directions_car" %}
+        {% else %}
+            {% set icon_name = "directions_walk" %}
+        {% endif %}
+        <div class="item-card draggable-item" draggable="true" data-item-id="{{ item.id }}">
+            <div class="item-head">
+                <span class="icon-badge"><span class="material-icons">{{ icon_name }}</span></span>
+                <div style="flex: 1;">
+                    <div class="row" style="justify-content: space-between;">
+                        <strong>{{ item.title }}</strong>
+                        <div class="row">
+                            {% set timing = unassigned_schedule.get(item.id, {}) %}
+                            {% if timing.get("start") %}
+                            <span class="chip"><span class="material-icons">schedule</span>{{ timing.get("start") }}{% if timing.get("end") %} - {{ timing.get("end") }}{% endif %}</span>
+                            {% endif %}
+                            <span class="chip">{{ item.item_type }}</span>
+                            <button
+                                type="button"
+                                class="icon-btn ghost-btn"
+                                title="Edit item"
+                                data-item-id="{{ item.id }}"
+                                data-title="{{ item.title }}"
+                                data-item-type="{{ item.item_type }}"
+                                data-day-id="{{ item.day_id if item.day_id is not none else '' }}"
+                                data-description="{{ item.description or '' }}"
+                                data-poi-type-id="{{ item.poi_type_id if item.poi_type_id is not none else '' }}"
+                                data-transport-type="{{ item.transport_type or '' }}"
+                                data-start-time="{{ item.start_time.strftime('%H:%M') if item.start_time else '' }}"
+                                data-duration-minutes="{{ item.duration_minutes if item.duration_minutes is not none else '' }}"
+                                data-distance-km="{{ item.distance_km if item.distance_km is not none else '' }}"
+                                data-uphill-m="{{ item.uphill_m if item.uphill_m is not none else '' }}"
+                                data-downhill-m="{{ item.downhill_m if item.downhill_m is not none else '' }}"
+                                data-tag-ids="{% for tag in item.tags %}{% if not loop.first %},{% endif %}{{ tag.id }}{% endfor %}"
+                                onclick="openEditPanelFromButton(this)"
+                            >
+                                <span class="material-icons">edit</span>
+                            </button>
+                            <form
+                                method="post"
+                                action="/frontend/trips/{{ trip.id }}/items/{{ item.id }}/delete"
+                                onsubmit="return confirm('Delete this item?');"
+                                style="display: inline;"
+                            >
+                                <button type="submit" class="icon-btn ghost-btn" title="Delete item">
+                                    <span class="material-icons">delete</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% if item.description %}
+                    <p class="muted" style="margin: 6px 0 0 0;">{{ item.description }}</p>
+                    {% endif %}
+                    {% if item.item_type == "transport" %}
+                    <div class="row" style="margin-top: 8px;">
+                        <span class="chip"><span class="material-icons">route</span>{{ "%.1f"|format(item_distance) }} km</span>
+                        <span class="chip"><span class="material-icons">trending_up</span>{{ "%.0f"|format(item_up) }} m</span>
+                        <span class="chip"><span class="material-icons">trending_down</span>{{ "%.0f"|format(item_down) }} m</span>
+                    </div>
+                    {% endif %}
+                    {% if item.tags %}
+                    <div class="row" style="margin-top: 8px;">
+                        {% for tag in item.tags %}
+                        <span class="chip" style="background: {{ tag.color }}22; color: {{ tag.color }};">
+                            <span class="material-icons">label</span>{{ tag.name }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div id="insert-slot-unassigned-{{ loop.index }}" class="insert-slot"></div>
+        <div class="insert-row {% if loop.last %}insert-row-end{% else %}insert-row-inline{% endif %}">
+            {% if loop.last %}
+            <button
+                type="button"
+                class="icon-btn ghost-btn insert-end-btn"
+                onclick="openItemPanel('', 'insert-slot-unassigned-{{ loop.index }}', {{ loop.index }})"
+                title="Add item at end"
+            >
+                <span class="material-icons">add</span>
+            </button>
+            {% else %}
+            <button
+                type="button"
+                class="icon-btn ghost-btn insert-inline-btn"
+                onclick="openItemPanel('', 'insert-slot-unassigned-{{ loop.index }}', {{ loop.index }})"
+                title="Insert item here"
+            >
+                <span class="material-icons">add</span>
+            </button>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="muted" style="margin: 0;">Drop items here.</p>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+function togglePanel(id) {
+    const panel = document.getElementById(id);
+    if (!panel) return;
+    panel.classList.toggle("show");
+}
+
+function toggleElevationProfile() {
+    const panel = document.getElementById("elevation-profile-panel");
+    if (!panel) return;
+    panel.classList.toggle("show");
+    if (panel.classList.contains("show")) {
+        renderElevationProfile();
+    }
+}
+
+function openRouteImportPanel(dayId, slotId, dayLabel) {
+    const panel = document.getElementById("route-import-panel");
+    const slot = document.getElementById(slotId);
+    const dayIdInput = document.getElementById("route-target-day-id");
+    const dayLabelEl = document.getElementById("route-target-day-label");
+    if (!panel || !slot || !dayIdInput || !dayLabelEl) return;
+
+    dayIdInput.value = dayId || "";
+    const targetInputs = document.querySelectorAll(".route-target-day-input");
+    targetInputs.forEach((input) => {
+        input.value = dayId || "";
+    });
+    dayLabelEl.textContent = dayLabel || "-";
+    slot.appendChild(panel);
+    panel.classList.add("show");
+    ensureRouteMap(dayId || null);
+}
+
+function showDayOnMap(dayId, slotId, dayLabel) {
+    openRouteImportPanel(dayId, slotId, dayLabel);
+    ensureRouteMap(dayId || null);
+}
+
+function restoreRouteImportPanel() {
+    const openDayId = {{ open_import_day_id | tojson }};
+    if (!openDayId) return;
+    const slotId = `day-route-slot-${openDayId}`;
+    const button = document.getElementById(`route-import-btn-day-${openDayId}`);
+    const dayLabel = button ? (button.closest(".row")?.querySelector("strong")?.textContent || "") : "";
+    openRouteImportPanel(String(openDayId), slotId, dayLabel);
+}
+
+function openItemPanel(dayId, slotId, insertPosition = null) {
+    const panel = document.getElementById("item-panel");
+    const daySelect = document.getElementById("day_id_select");
+    const insertPositionInput = document.getElementById("insert_position_input");
+    const slot = document.getElementById(slotId);
+
+    if (daySelect) {
+        daySelect.value = dayId || "";
+    }
+    if (insertPositionInput) {
+        insertPositionInput.value = Number.isInteger(insertPosition) ? String(insertPosition) : "";
+    }
+    if (slot && panel) {
+        slot.appendChild(panel);
+    }
+    if (panel && !panel.classList.contains("show")) {
+        panel.classList.add("show");
+    }
+}
+
+function toggleDay(dayId) {
+    const content = document.getElementById(`day-content-${dayId}`);
+    const icon = document.getElementById(`day-toggle-icon-${dayId}`);
+    if (!content || !icon) return;
+    content.classList.toggle("collapsed");
+    icon.textContent = content.classList.contains("collapsed") ? "expand_more" : "expand_less";
+    if (!content.classList.contains("collapsed")) {
+        refreshRouteMap();
+    }
+}
+
+function toggleTripEditDates() {
+    const checked = document.getElementById("edit_trip_is_plan").checked;
+    const startField = document.getElementById("edit_trip_start_date_field");
+    const endField = document.getElementById("edit_trip_end_date_field");
+    if (startField) startField.style.display = checked ? "none" : "block";
+    if (endField) endField.style.display = checked ? "none" : "block";
+}
+
+function toggleItemTypeFields() {
+    const isTransport = document.getElementById("item_type").value === "transport";
+    const poiField = document.getElementById("poi-type-field");
+    const transportTypeField = document.getElementById("transport-type-field");
+    const transportFields = document.querySelectorAll(".transport-field");
+
+    if (poiField) poiField.style.display = isTransport ? "none" : "block";
+    if (transportTypeField) transportTypeField.style.display = isTransport ? "block" : "none";
+
+    transportFields.forEach((field) => {
+        field.style.display = isTransport ? "block" : "none";
+    });
+}
+
+function toggleEditTypeFields() {
+    const isTransport = document.getElementById("edit_item_type").value === "transport";
+    const poiField = document.getElementById("edit_poi_type_field");
+    const transportTypeField = document.getElementById("edit_transport_type_field");
+    const transportFields = document.querySelectorAll(".edit_transport_field");
+
+    if (poiField) poiField.style.display = isTransport ? "none" : "block";
+    if (transportTypeField) transportTypeField.style.display = isTransport ? "block" : "none";
+
+    transportFields.forEach((field) => {
+        field.style.display = isTransport ? "block" : "none";
+    });
+}
+
+function openEditPanelFromButton(button) {
+    const dataset = button.dataset;
+    const panel = document.getElementById("edit-panel");
+    const card = button.closest(".item-card");
+    if (panel && card) {
+        card.insertAdjacentElement("afterend", panel);
+    }
+    document.getElementById("edit-item-form").action = `/frontend/trips/{{ trip.id }}/items/${dataset.itemId}/edit`;
+    document.getElementById("edit_title").value = dataset.title || "";
+    document.getElementById("edit_item_type").value = dataset.itemType || "poi";
+    document.getElementById("edit_day_id").value = dataset.dayId || "";
+    document.getElementById("edit_description").value = dataset.description || "";
+    document.getElementById("edit_poi_type_id").value = dataset.poiTypeId || "";
+    document.getElementById("edit_transport_type").value = dataset.transportType || "";
+    document.getElementById("edit_start_time").value = dataset.startTime || "";
+    document.getElementById("edit_duration_minutes").value = dataset.durationMinutes || "";
+    document.getElementById("edit_distance_km").value = dataset.distanceKm || "";
+    document.getElementById("edit_uphill_m").value = dataset.uphillM || "";
+    document.getElementById("edit_downhill_m").value = dataset.downhillM || "";
+    const tagSelect = document.getElementById("edit_tag_ids");
+    const selected = (dataset.tagIds || "").split(",").filter(Boolean);
+    for (const option of tagSelect.options) {
+        option.selected = selected.includes(option.value);
+    }
+
+    toggleEditTypeFields();
+    if (panel && !panel.classList.contains("show")) {
+        panel.classList.add("show");
+    }
+}
+
+function wireDragAndDrop() {
+    let draggedElement = null;
+
+    document.querySelectorAll(".draggable-item").forEach((el) => {
+        el.addEventListener("dragstart", () => {
+            draggedElement = el;
+            el.classList.add("dragging");
+        });
+        el.addEventListener("dragend", () => {
+            el.classList.remove("dragging");
+            draggedElement = null;
+        });
+    });
+
+    document.querySelectorAll(".drop-zone").forEach((zone) => {
+        zone.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            const after = getDragAfterElement(zone, event.clientY);
+            if (!draggedElement) return;
+            if (!after) {
+                zone.appendChild(draggedElement);
+            } else {
+                zone.insertBefore(draggedElement, after);
+            }
+        });
+
+        zone.addEventListener("drop", async () => {
+            if (!draggedElement) return;
+            const dayValue = zone.dataset.dayId;
+            const dayId = dayValue === "" ? null : Number(dayValue);
+            const siblings = [...zone.querySelectorAll(".draggable-item")];
+            const position = siblings.findIndex((node) => node.dataset.itemId === draggedElement.dataset.itemId);
+            await persistMove(draggedElement.dataset.itemId, dayId, position);
+        });
+    });
+}
+
+function getDragAfterElement(container, y) {
+    const elements = [...container.querySelectorAll(".draggable-item:not(.dragging)")];
+    return elements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        }
+        return closest;
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+async function persistMove(itemId, dayId, position) {
+    const response = await fetch(`/frontend/trips/{{ trip.id }}/items/${itemId}/move`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ day_id: dayId, position: position }),
+    });
+
+    window.location.reload();
+}
+
+async function initRouteMap() {
+    const mapEl = document.getElementById("route-map");
+    if (!mapEl) return;
+
+    routeMapInstance = L.map("route-map");
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(routeMapInstance);
+
+    let tempMarker = null;
+    routeMapInstance.on("click", (e) => {
+        let picked = { lat: e.latlng.lat, lon: e.latlng.lng };
+        if (currentRoutePoints.length) {
+            let best = null;
+            for (const p of currentRoutePoints) {
+                const dist = Math.hypot(p.lat - e.latlng.lat, p.lon - e.latlng.lng);
+                if (!best || dist < best.dist) best = { dist, p };
+            }
+            if (best) picked = { lat: best.p.lat, lon: best.p.lon };
+        }
+
+        if (tempMarker) routeMapInstance.removeLayer(tempMarker);
+        tempMarker = L.circleMarker([picked.lat, picked.lon], {
+            radius: 7,
+            color: "#ef4444",
+            fillColor: "#ef4444",
+            fillOpacity: 0.7,
+        }).addTo(routeMapInstance);
+
+        const latInput = document.getElementById("marker-latitude");
+        const lonInput = document.getElementById("marker-longitude");
+        if (latInput) latInput.value = picked.lat.toFixed(6);
+        if (lonInput) lonInput.value = picked.lon.toFixed(6);
+    });
+
+    routeTempMarkerRef = {
+        get: () => tempMarker,
+        set: (marker) => {
+            tempMarker = marker;
+        },
+    };
+}
+
+let routeMapInstance = null;
+let routeMapInitPromise = null;
+let routePolylineLayer = null;
+let routeMarkersLayer = null;
+let currentRoutePoints = [];
+let currentRouteDayId = null;
+let routeTempMarkerRef = null;
+
+function setRouteMapTitle(title) {
+    const titleEl = document.getElementById("route-map-title");
+    if (!titleEl) return;
+    titleEl.textContent = title || "Route";
+}
+
+function clearRouteLayers() {
+    if (!routeMapInstance) return;
+    if (routePolylineLayer) {
+        routeMapInstance.removeLayer(routePolylineLayer);
+        routePolylineLayer = null;
+    }
+    if (routeMarkersLayer) {
+        routeMapInstance.removeLayer(routeMarkersLayer);
+        routeMarkersLayer = null;
+    }
+}
+
+async function loadRouteData(dayId = null) {
+    const normalizedDayId = dayId ? String(dayId) : null;
+    if (normalizedDayId === currentRouteDayId && currentRoutePoints.length) {
+        return;
+    }
+
+    const url = new URL(`/frontend/trips/{{ trip.id }}/route/data`, window.location.origin);
+    if (normalizedDayId) {
+        url.searchParams.set("day_id", normalizedDayId);
+    }
+    const response = await fetch(url.toString());
+    if (!response.ok) return;
+
+    const data = await response.json();
+    const points = data.points || [];
+    const markers = data.markers || [];
+
+    currentRoutePoints = points;
+    currentRouteDayId = normalizedDayId;
+    clearRouteLayers();
+
+    if (points.length) {
+        const latlngs = points.map((p) => [p.lat, p.lon]);
+        routePolylineLayer = L.polyline(latlngs, { color: "#0f766e", weight: 4 }).addTo(routeMapInstance);
+        routeMapInstance.fitBounds(routePolylineLayer.getBounds(), { padding: [20, 20] });
+    } else {
+        routeMapInstance.setView([48.7, 19.7], 7);
+    }
+
+    routeMarkersLayer = L.layerGroup().addTo(routeMapInstance);
+    markers.forEach((m) => {
+        L.marker([m.lat, m.lon]).addTo(routeMarkersLayer).bindPopup(`${m.title} (${m.poi_type})`);
+    });
+    setRouteMapTitle(data.display_title || "Route");
+
+    if (routeTempMarkerRef) {
+        const marker = routeTempMarkerRef.get();
+        if (marker) {
+            routeMapInstance.removeLayer(marker);
+            routeTempMarkerRef.set(null);
+        }
+    }
+}
+
+function refreshRouteMap() {
+    if (!routeMapInstance) return;
+    setTimeout(() => {
+        routeMapInstance.invalidateSize(true);
+    }, 50);
+}
+
+async function ensureRouteMap(dayId = null) {
+    if (routeMapInstance) {
+        await loadRouteData(dayId);
+        refreshRouteMap();
+        return;
+    }
+    if (!routeMapInitPromise) {
+        routeMapInitPromise = initRouteMap().finally(() => {
+            routeMapInitPromise = null;
+        });
+    }
+    await routeMapInitPromise;
+    await loadRouteData(dayId);
+    refreshRouteMap();
+}
+
+function renderElevationProfile() {
+    const chart = document.getElementById("elevation-profile");
+    const meta = document.getElementById("elevation-profile-meta");
+    if (!chart || !meta) return;
+
+    const profile = {{ route_profile | tojson }};
+    if (!profile.length) {
+        chart.innerHTML = "<p class='muted' style='margin: 0;'>No elevation data in GPX.</p>";
+        meta.textContent = "";
+        return;
+    }
+
+    const width = Math.max(320, chart.clientWidth || 320);
+    const height = 220;
+    const padding = 24;
+    const minElevation = Math.min(...profile.map((p) => p.elevation_m));
+    const maxElevation = Math.max(...profile.map((p) => p.elevation_m));
+    const elevationRange = Math.max(1, maxElevation - minElevation);
+    const maxDistanceKm = Math.max(0.001, profile[profile.length - 1].distance_km);
+
+    const x = (distanceKm) => padding + (distanceKm / maxDistanceKm) * (width - 2 * padding);
+    const y = (elevationM) => height - padding - ((elevationM - minElevation) / elevationRange) * (height - 2 * padding);
+    const points = profile.map((p) => `${x(p.distance_km).toFixed(1)},${y(p.elevation_m).toFixed(1)}`).join(" ");
+    const area = `${padding},${height - padding} ${points} ${width - padding},${height - padding}`;
+
+    chart.innerHTML = `
+        <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Elevation profile">
+            <rect x="0" y="0" width="${width}" height="${height}" fill="#f8fafc"></rect>
+            <polygon points="${area}" fill="#0f766e22"></polygon>
+            <polyline points="${points}" fill="none" stroke="#0f766e" stroke-width="2.5"></polyline>
+            <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="#cbd5e1"></line>
+            <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}" stroke="#cbd5e1"></line>
+            <text x="${padding}" y="16" font-size="12" fill="#334155">${Math.round(maxElevation)} m</text>
+            <text x="${padding}" y="${height - 8}" font-size="12" fill="#334155">${Math.round(minElevation)} m</text>
+            <text x="${width - padding}" y="${height - 8}" text-anchor="end" font-size="12" fill="#334155">${maxDistanceKm.toFixed(1)} km</text>
+        </svg>
+    `;
+    meta.textContent = `Distance ${maxDistanceKm.toFixed(2)} km | Elevation ${Math.round(minElevation)}-${Math.round(maxElevation)} m`;
+}
+
+toggleItemTypeFields();
+toggleEditTypeFields();
+toggleTripEditDates();
+wireDragAndDrop();
+restoreRouteImportPanel();
+window.addEventListener("resize", () => {
+    const panel = document.getElementById("elevation-profile-panel");
+    if (panel && panel.classList.contains("show")) {
+        renderElevationProfile();
+    }
+    refreshRouteMap();
+});
+</script>
+{% endblock %}

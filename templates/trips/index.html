@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %}Trips{% endblock %}
+{% block content %}
+<style>
+    .filters-grid {
+        display: grid;
+        gap: 12px;
+    }
+    .tag-picker {
+        position: relative;
+    }
+    .tag-picker-btn {
+        width: 100%;
+        justify-content: space-between;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-align: left;
+    }
+    .tag-picker-btn .label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .tag-picker-panel {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        z-index: 20;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 10px;
+        display: none;
+        max-height: 220px;
+        overflow: auto;
+    }
+    .tag-picker-panel.open {
+        display: block;
+    }
+    .tag-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 6px 4px;
+    }
+    .tag-summary {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+</style>
+<div class="row" style="justify-content: space-between; margin-bottom: 18px;">
+    <h1 style="margin: 0;">Trips</h1>
+    <a href="/frontend/trips/new">Create trip</a>
+</div>
+
+<section class="card">
+    <h2 style="margin-top: 0;">Filters</h2>
+    <form method="get" action="/frontend/trips" class="filters-grid">
+        <div class="row">
+            <label>
+                Date from<br>
+                <input type="date" name="date_from" value="{{ date_from }}">
+            </label>
+            <label>
+                Date to<br>
+                <input type="date" name="date_to" value="{{ date_to }}">
+            </label>
+            <label>
+                Trip type<br>
+                <select name="plan_filter">
+                    <option value="all" {% if plan_filter == "all" %}selected{% endif %}>All</option>
+                    <option value="dated" {% if plan_filter == "dated" %}selected{% endif %}>Dated trips</option>
+                    <option value="plan" {% if plan_filter == "plan" %}selected{% endif %}>Plans</option>
+                </select>
+            </label>
+        </div>
+        <div>
+            <label>Tags</label>
+            <div id="tag-picker" class="tag-picker">
+                <button id="tag-picker-btn" type="button" class="ghost-btn tag-picker-btn">
+                    <span class="label"><span class="material-icons">label</span><span id="tag-picker-text">All tags</span></span>
+                    <span class="material-icons">expand_more</span>
+                </button>
+                <div id="tag-picker-panel" class="tag-picker-panel">
+                    {% for tag in tags %}
+                    <label class="tag-option">
+                        <span class="chip" style="background: {{ tag.color }}22; color: {{ tag.color }};">
+                            <span class="material-icons">label</span>{{ tag.name }}
+                        </span>
+                        <input
+                            class="tag-filter-checkbox"
+                            type="checkbox"
+                            name="tag_ids"
+                            value="{{ tag.id }}"
+                            {% if tag.id in selected_tag_ids %}checked{% endif %}
+                        >
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="tag-summary" class="tag-summary"></div>
+        </div>
+        <div class="row">
+            <button type="submit">Apply filters</button>
+            <a href="/frontend/trips">Clear</a>
+        </div>
+    </form>
+</section>
+
+{% if trips %}
+    {% for trip in trips %}
+    <article class="card">
+        <div class="row" style="justify-content: space-between;">
+            <h2 style="margin-top: 0;"><a href="/frontend/trips/{{ trip.id }}">{{ trip.name }}</a></h2>
+            {% if trip.is_plan %}
+            <span class="chip"><span class="material-icons">event_note</span>Plan</span>
+            {% endif %}
+        </div>
+        <p class="muted" style="margin-bottom: 0;">
+            {% if trip.is_plan %}
+            No fixed date
+            {% else %}
+            {{ trip.start_date or "-" }} to {{ trip.end_date or "-" }}
+            {% endif %}
+        </p>
+        {% if trip.tags %}
+        <div class="row" style="margin-top: 8px;">
+            {% for tag in trip.tags %}
+            <span class="chip" style="background: {{ tag.color }}22; color: {{ tag.color }};">
+                <span class="material-icons">label</span>{{ tag.name }}
+            </span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </article>
+    {% endfor %}
+{% else %}
+    <div class="card">
+        <p style="margin: 0;">No trips yet.</p>
+    </div>
+{% endif %}
+<script>
+const pickerBtn = document.getElementById("tag-picker-btn");
+const pickerPanel = document.getElementById("tag-picker-panel");
+const pickerText = document.getElementById("tag-picker-text");
+const summaryEl = document.getElementById("tag-summary");
+const checkboxes = [...document.querySelectorAll(".tag-filter-checkbox")];
+
+function refreshTagSummary() {
+    const selected = checkboxes.filter((cb) => cb.checked);
+    if (!selected.length) {
+        pickerText.textContent = "All tags";
+        summaryEl.innerHTML = "";
+        return;
+    }
+    if (selected.length === 1) {
+        pickerText.textContent = "1 tag selected";
+    } else {
+        pickerText.textContent = `${selected.length} tags selected`;
+    }
+
+    summaryEl.innerHTML = "";
+    selected.forEach((cb) => {
+        const row = cb.closest(".tag-option");
+        const chip = row ? row.querySelector(".chip") : null;
+        if (!chip) return;
+        summaryEl.insertAdjacentHTML("beforeend", chip.outerHTML);
+    });
+}
+
+if (pickerBtn && pickerPanel) {
+    pickerBtn.addEventListener("click", () => {
+        pickerPanel.classList.toggle("open");
+    });
+    document.addEventListener("click", (event) => {
+        const picker = document.getElementById("tag-picker");
+        if (!picker) return;
+        if (!picker.contains(event.target)) {
+            pickerPanel.classList.remove("open");
+        }
+    });
+}
+checkboxes.forEach((cb) => cb.addEventListener("change", refreshTagSummary));
+refreshTagSummary();
+</script>
+{% endblock %}

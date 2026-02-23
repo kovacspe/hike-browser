@@ -1,9 +1,0 @@
-<h1>Hike browser</h1>
-<h2>Miesta - <a href="places_map.html">MAPA</a></h2>
-
-<h2>Túry</h2>
-<ul>
-    {% for hike in hikes %}
-    <li><a href='hike/{{hike.slug}}.html'>{{hike.name}}</a></li>
-    {% endfor %}
-</ul>
